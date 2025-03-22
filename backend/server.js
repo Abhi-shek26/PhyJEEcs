@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const userRoutes = require('./routes/User')
+const questionRoutes = require("./routes/Question");
 
 
 const app = express();
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/user", userRoutes);
+app.use("/api", questionRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {dbName: "PhyJEEcs"})
