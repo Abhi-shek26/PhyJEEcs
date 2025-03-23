@@ -47,7 +47,7 @@ const Signup = () => {
                     <button type="submit" className="auth-button">Signup</button>
                 </form>
                 <div className="auth-footer">
-                    Already a member? <a href="/">Login</a>
+                    Already a member? <a href="/login">Login</a>
                 </div>
             </div>
         </div>
