@@ -17,10 +17,10 @@ const Navbar = () => {
       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
         {isLoggedIn ? (
           <>
-            <NavLink to="/dashboard" activeClassName="active">
+            <NavLink to="/dashboard" activeclassname="active">
               Dashboard
             </NavLink>
-            <NavLink to="/practice" activeClassName="active">
+            <NavLink to="/practice" activeclassname="active">
               Practice
             </NavLink>
             <div
@@ -39,10 +39,10 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <NavLink to="/login" activeClassName="active">
+            <NavLink to="/login" activeclassname="active">
               Login
             </NavLink>
-            <NavLink to="/signup" activeClassName="active">
+            <NavLink to="/signup" activeclassname="active">
               Signup
             </NavLink>
           </>
