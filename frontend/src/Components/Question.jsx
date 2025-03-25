@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { CiBookmarkPlus } from "react-icons/ci";
+import { MdFeedback } from "react-icons/md";
 import Timer from "./Timer";
-import "./Question.css"; // Keeping all styles in one file
+import "./Question.css"; 
 
 const question = {
   id: "KMJM1",
@@ -60,8 +62,8 @@ const Question = () => {
           <span className="chip">{question.type}</span>
         </div>
         <div className="options">
-          <span className="bookmark">🔖</span>
-          <span className="feedback">💬</span>
+          <span className="bookmark"><CiBookmarkPlus/></span>
+          <span className="feedback"><MdFeedback/></span>
         </div>
       </div>
 
