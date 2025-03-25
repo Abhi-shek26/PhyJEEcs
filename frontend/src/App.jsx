@@ -11,6 +11,7 @@ import Bookmarks from "./Components/Bookmarks";
 import Dashboard from "./Components/Dashboard";
 import Logout from "./Components/Logout";
 import AddQuestion from "./Components/AddQuestion";
+import Question from "./Components/Question";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="bookmarks" element={<Bookmarks />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="question" element={<Question />} />
           <Route path="logout" element={<Logout />} />
           <Route path="add" element={<AddQuestion />} />
         </Route>

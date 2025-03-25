@@ -10,7 +10,7 @@ const question = {
   level: "JEE Mains",
   type: "Multiple Correct", // Change to "Single Correct" or "Numerical" for testing
   image:
-    "https://res.cloudinary.com/dubavyoxd/image/upload/v1742666009/Questions/KinematicsJEE%20Mains/Multiple%20Correct/dmqapjif2wckh3srt7mt.png",
+    "https://res.cloudinary.com/dubavyoxd/image/upload/v1742898758/Questions/2.KinematicsJEE%20Mains/Multiple%20Correct/qcezhvvbrfgcial9lzlr.png",
   options: ["A", "B", "C", "D"],
 };
 
@@ -18,7 +18,7 @@ const Question = () => {
   const [attemptStarted, setAttemptStarted] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(
     question.type === "Multiple Correct" ? [] : null
-  ); // Handle different types correctly
+  ); 
   const [submittedAnswer, setSubmittedAnswer] = useState(null);
   const [timeTaken, setTimeTaken] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -39,21 +39,18 @@ const Question = () => {
     if (!attemptStarted || submittedAnswer !== null) return;
 
     if (question.type === "Multiple Correct") {
-      // Allow multiple selections
       setSelectedAnswer((prev) =>
         prev.includes(option)
-          ? prev.filter((ans) => ans !== option) // Remove if already selected
-          : [...prev, option] // Add if not selected
+          ? prev.filter((ans) => ans !== option)
+          : [...prev, option]
       );
     } else if (question.type === "Single Correct") {
-      // Allow only one selection
       setSelectedAnswer(option);
     }
   };
 
   return (
     <div className="question-container">
-      {/* Header */}
       <div className="question-header">
         <span className="question-id">{question.id}</span>
         <div className="chips">
@@ -62,17 +59,15 @@ const Question = () => {
           <span className="chip">{question.type}</span>
         </div>
         <div className="options">
-          <span className="bookmark"><CiBookmarkPlus/></span>
-          <span className="feedback"><MdFeedback/></span>
+          <span className="bookmark"><CiBookmarkPlus /></span>
+          <span className="feedback"><MdFeedback /></span>
         </div>
       </div>
 
-      {/* Question Image */}
       <div className="question-image" onClick={() => setImageExpanded(true)}>
         <img src={question.image} alt="Question" />
       </div>
 
-      {/* Image Modal for Fullscreen View */}
       {imageExpanded && (
         <div className="image-modal" onClick={() => setImageExpanded(false)}>
           <div className="image-modal-content">
@@ -81,7 +76,6 @@ const Question = () => {
         </div>
       )}
 
-      {/* Timer Display */}
       <div className="timer-box">
         {attemptStarted && (
           <Timer
@@ -92,7 +86,6 @@ const Question = () => {
         )}
       </div>
 
-      {/* Options / Input */}
       <div className="options-container">
         {question.type === "Single Correct" || question.type === "Multiple Correct" ? (
           <div className="mcq-options">
@@ -101,10 +94,10 @@ const Question = () => {
                 key={index}
                 className={`option-button ${
                   question.type === "Multiple Correct"
-                    ? selectedAnswer.includes(option) // Highlight multiple selected answers
+                    ? selectedAnswer.includes(option) 
                       ? "selected"
                       : ""
-                    : selectedAnswer === option // Highlight only one selected answer for Single Correct
+                    : selectedAnswer === option 
                     ? "selected"
                     : ""
                 }`}
@@ -129,7 +122,6 @@ const Question = () => {
         )}
       </div>
 
-      {/* Buttons */}
       <div className="buttons">
         <button
           onClick={startAttempt}
@@ -147,7 +139,6 @@ const Question = () => {
         </button>
       </div>
 
-      {/* Submitted Answer & Time */}
       {submittedAnswer !== null && (
         <div className="result">
           <p>
@@ -159,8 +150,7 @@ const Question = () => {
             </strong>
           </p>
           <p>
-            Time Taken:{" "}
-            <strong>{timeTaken ? `${timeTaken} sec` : "N/A"}</strong>
+            Time Taken: <strong>{timeTaken ? `${timeTaken} sec` : "N/A"}</strong>
           </p>
         </div>
       )}

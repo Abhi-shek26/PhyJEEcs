@@ -1,0 +1,12 @@
+.practice-container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .filter-section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
