@@ -10,7 +10,7 @@ const question = {
   level: "JEE Mains",
   type: "Multiple Correct", // Change to "Single Correct" or "Numerical" for testing
   image:
-    "https://res.cloudinary.com/dubavyoxd/image/upload/v1742666009/Questions/KinematicsJEE%20Mains/Multiple%20Correct/dmqapjif2wckh3srt7mt.png",
+    "https://res.cloudinary.com/dubavyoxd/image/upload/v1742898758/Questions/2.KinematicsJEE%20Mains/Multiple%20Correct/qcezhvvbrfgcial9lzlr.png",
   options: ["A", "B", "C", "D"],
 };
 
