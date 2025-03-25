@@ -4,7 +4,7 @@ const Question = require("../models/Question");
 // Upload Question
 exports.uploadQuestion = async (req, res) => {
   try {
-    const { title, category, type, chapter } = req.body;
+    const { title, category, type, chapter , correctAnswer} = req.body;
 
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
@@ -16,6 +16,21 @@ exports.uploadQuestion = async (req, res) => {
       async (error, cloudinaryResult) => {
         if (error) return res.status(500).json({ error: "Upload failed" });
 
+        let formattedCorrectAnswer;
+
+        if (type === "Numerical") {
+          formattedCorrectAnswer = parseFloat(correctAnswer);
+        } 
+        else if (type === "Single Correct") {
+          formattedCorrectAnswer = correctAnswer.toUpperCase(); // Ensure uppercase
+        } 
+        else if (type === "Multiple Correct") {
+          formattedCorrectAnswer = correctAnswer.split(",").map((opt) => opt.trim().toUpperCase()); // Keep order
+        } 
+        else {
+          return res.status(400).json({ error: "Invalid question type" });
+        }
+
         // Save question in MongoDB
         const newQuestion = new Question({
           title,
@@ -23,6 +38,7 @@ exports.uploadQuestion = async (req, res) => {
           category,
           type,
           chapter,
+          correctAnswer: formattedCorrectAnswer,
         });
 
         await newQuestion.save();
@@ -50,3 +66,36 @@ exports.getQuestions = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.attemptQuestion = async (req, res) => {
+  try {
+    const { questionId, userAnswer } = req.body;
+
+    const question = await Question.findById(questionId);
+    if (!question) return res.status(404).json({ error: "Question not found" });
+
+    let isCorrect = false;
+
+    if (question.type === "Single Correct") {
+      isCorrect = question.correctAnswer === userAnswer.toUpperCase();
+    } 
+    else if (question.type === "Multiple Correct") {
+      // Convert both answers to sets to ignore order
+      const correctSet = new Set(question.correctAnswer.map(opt => opt.trim().toUpperCase()));
+      const userSet = new Set(userAnswer.map(opt => opt.trim().toUpperCase()));
+
+      isCorrect = correctSet.size === userSet.size && [...correctSet].every(opt => userSet.has(opt));
+    } 
+    else if (question.type === "Numerical") {
+      isCorrect = parseFloat(userAnswer) === question.correctAnswer;
+    }
+
+    res.status(200).json({
+      message: isCorrect ? "Correct Answer!" : "Incorrect Answer",
+      isCorrect,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
