@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { CgProfile } from "react-icons/cg";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -27,7 +28,7 @@ const Navbar = () => {
               className="profile-container"
               onClick={() => setProfileOpen(!profileOpen)}
             >
-              <div className="profile-icon">👤</div>
+              <div className="profile-icon"><CgProfile/></div>
               {profileOpen && (
                 <div className="profile-dropdown">
                   <NavLink to="/profile">Profile</NavLink>
