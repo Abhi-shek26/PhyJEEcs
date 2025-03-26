@@ -40,6 +40,7 @@ const AddQuestion = () => {
   const [type, setType] = useState("Single Correct");
   const [chapter, setChapter] = useState("");
   const [image, setImage] = useState(null);
+  const [correctAnswer, setCorrectAnswer] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [imageWidth, setImageWidth] = useState(0);
   const [imageHeight, setImageHeight] = useState(0);
@@ -76,6 +77,7 @@ const AddQuestion = () => {
     formData.append("type", type);
     formData.append("chapter", chapter);
     formData.append("image", image);
+    formData.append("correctAnswer", correctAnswer);
 
     setLoading(true);
 
@@ -171,6 +173,15 @@ const AddQuestion = () => {
             <img src={imagePreview} alt="Preview" />
           </div>
         )}
+        <div className="input-group">
+          <input
+            type="text"
+            placeholder="Correct Answer"
+            value={correctAnswer}
+            onChange={(e) => setCorrectAnswer(e.target.value)}
+            required
+          />
+        </div>
 
         <button className="Submit-button" type="submit" disabled={loading}>
           {loading ? "Uploading..." : "Submit"}
