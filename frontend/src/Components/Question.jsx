@@ -2,23 +2,17 @@ import React, { useState } from "react";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { MdFeedback } from "react-icons/md";
 import Timer from "./Timer";
-import "./Question.css"; 
+import "./Question.css";
 
-const question = {
-  id: "KMJM1",
-  chapter: "Kinematics",
-  level: "JEE Mains",
-  type: "Multiple Correct", // Change to "Single Correct" or "Numerical" for testing
-  image:
-    "https://res.cloudinary.com/dubavyoxd/image/upload/v1742898758/Questions/2.KinematicsJEE%20Mains/Multiple%20Correct/qcezhvvbrfgcial9lzlr.png",
-  options: ["A", "B", "C", "D"],
-};
+const Question = ({ question }) => {
+  if (!question || Object.keys(question).length === 0) {
+    return <p className="loading-message">Loading question...</p>;
+  }
 
-const Question = () => {
   const [attemptStarted, setAttemptStarted] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(
-    question.type === "Multiple Correct" ? [] : null
-  ); 
+    question.type === "Multiple Correct" ? [] : ""
+  );
   const [submittedAnswer, setSubmittedAnswer] = useState(null);
   const [timeTaken, setTimeTaken] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
@@ -52,28 +46,42 @@ const Question = () => {
   return (
     <div className="question-container">
       <div className="question-header">
-        <span className="question-id">{question.id}</span>
+        <span className="question-id">{question.title || "N/A"}</span>
         <div className="chips">
-          <span className="chip">{question.chapter}</span>
-          <span className="chip">{question.level}</span>
-          <span className="chip">{question.type}</span>
+          <span className="chip">{question.chapter || "Unknown Chapter"}</span>
+          <span className="chip">{question.category || "Unknown Level"}</span>
+          <span className="chip">{question.type || "Unknown Type"}</span>
         </div>
         <div className="options">
-          <span className="bookmark"><CiBookmarkPlus /></span>
-          <span className="feedback"><MdFeedback /></span>
+          <span className="bookmark">
+            <CiBookmarkPlus />
+          </span>
+          <span className="feedback">
+            <MdFeedback />
+          </span>
         </div>
       </div>
 
-      <div className="question-image" onClick={() => setImageExpanded(true)}>
-        <img src={question.image} alt="Question" />
-      </div>
-
-      {imageExpanded && (
-        <div className="image-modal" onClick={() => setImageExpanded(false)}>
-          <div className="image-modal-content">
-            <img src={question.image} alt="Expanded Question" />
+      {question.imageUrl && (
+        <>
+          <div
+            className="question-image"
+            onClick={() => setImageExpanded(true)}
+          >
+            <img src={question.imageUrl} alt="Question" />
           </div>
-        </div>
+
+          {imageExpanded && (
+            <div
+              className="image-modal"
+              onClick={() => setImageExpanded(false)}
+            >
+              <div className="image-modal-content">
+                <img src={question.imageUrl} alt="Expanded Question" />
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       <div className="timer-box">
@@ -87,17 +95,18 @@ const Question = () => {
       </div>
 
       <div className="options-container">
-        {question.type === "Single Correct" || question.type === "Multiple Correct" ? (
+        {question.type === "Single Correct" ||
+        question.type === "Multiple Correct" ? (
           <div className="mcq-options">
-            {question.options.map((option, index) => (
+            {["A", "B", "C", "D"].map((option, index) => (
               <button
                 key={index}
                 className={`option-button ${
                   question.type === "Multiple Correct"
-                    ? selectedAnswer.includes(option) 
+                    ? selectedAnswer.includes(option)
                       ? "selected"
                       : ""
-                    : selectedAnswer === option 
+                    : selectedAnswer === option
                     ? "selected"
                     : ""
                 }`}
@@ -108,7 +117,7 @@ const Question = () => {
               </button>
             ))}
           </div>
-        ) : (
+        ) : question.type === "Numerical" ? (
           <input
             type="text"
             className="numerical-input"
@@ -119,7 +128,7 @@ const Question = () => {
             }
             disabled={!attemptStarted || submittedAnswer !== null}
           />
-        )}
+        ) : null}
       </div>
 
       <div className="buttons">
@@ -150,7 +159,8 @@ const Question = () => {
             </strong>
           </p>
           <p>
-            Time Taken: <strong>{timeTaken ? `${timeTaken} sec` : "N/A"}</strong>
+            Time Taken:{" "}
+            <strong>{timeTaken ? `${timeTaken} sec` : "N/A"}</strong>
           </p>
         </div>
       )}
