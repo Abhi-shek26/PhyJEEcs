@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { useAuthContext } from "./hooks/useAuthContext";
 import Layout from "./Components/Layout";
 import Home from "./Components/Home";
@@ -11,6 +16,7 @@ import Bookmarks from "./Components/Bookmarks";
 import Dashboard from "./Components/Dashboard";
 import Logout from "./Components/Logout";
 import AddQuestion from "./Components/AddQuestion";
+import LandingPage from "./Components/LandingPage";
 import Question from "./Components/Question";
 
 function App() {
@@ -21,13 +27,23 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           {/* Public Routes */}
-          <Route index element={!user ? <Home /> : <Navigate to="/dashboard" />} />
-          <Route path="login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-          <Route path="signup" element={!user ? <Signup /> : <Navigate to="/dashboard" />} />
+          <Route
+            index
+            element={!user ? <LandingPage /> : <Navigate to="/home" />}
+          />
+          <Route
+            path="login"
+            element={!user ? <Login /> : <Navigate to="/home" />}
+          />
+          <Route
+            path="signup"
+            element={!user ? <Signup /> : <Navigate to="/home" />}
+          />
 
           {/* Protected Routes - Only accessible if user is logged in */}
           {user ? (
             <>
+              <Route path="/home" element={<Home />} />
               <Route path="practice" element={<Practice />} />
               <Route path="profile" element={<Profile />} />
               <Route path="bookmarks" element={<Bookmarks />} />
@@ -39,7 +55,7 @@ function App() {
           ) : (
             // Redirect to login if user is not authenticated
             <>
-              <Route path="*" element={<Navigate to="/login" />} />
+              <Route path="*" element={<Navigate to="/" />} />
             </>
           )}
         </Route>
