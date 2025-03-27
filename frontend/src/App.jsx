@@ -11,6 +11,7 @@ import Bookmarks from "./Components/Bookmarks";
 import Dashboard from "./Components/Dashboard";
 import Logout from "./Components/Logout";
 import AddQuestion from "./Components/AddQuestion";
+import LandingPage from "./Components/LandingPage";
 import Question from "./Components/Question";
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
       <Routes>
         {/* Wrap all routes inside Layout */}
         <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+          <Route index element={<LandingPage />} />
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
           <Route path="practice" element={<Practice />} />
