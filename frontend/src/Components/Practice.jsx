@@ -35,6 +35,7 @@ const Practice = () => {
       );
       const data = await response.json();
       console.log("Fetched Question Data:", data);
+      console.log("Correct Answer:", data[currentQuestionIndex].correctAnswer);
       if (!response.ok) throw new Error(data.message || "Failed to fetch questions");
       setQuestions(data);
       setCurrentQuestionIndex(0);

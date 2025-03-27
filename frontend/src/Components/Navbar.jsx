@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="logo">
-        <NavLink to="/">PhyJEEcs</NavLink>
+        <NavLink to="/"><img src="src\assets\phyJEEcs-logo.png"></img></NavLink>
       </div>
 
       {/* Desktop Navigation */}
