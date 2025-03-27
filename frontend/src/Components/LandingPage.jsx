@@ -1,11 +1,25 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Lottie from 'lottie-react';
+import animationData from './animation.json';
 import './LandingPage.css';
 
-const LandingPage = () => {
+export default function LandingPage() {
+
   return (
-    <div className="landing-page">
-      <h1>Welcome to our website!</h1>
-      <p>Here you can find all the information you need.</p>
+    <div className="container">
+      {/* Hero Section */}
+      <div className="hero">
+        <h1>Welcome to PhyJEEcs</h1>
+        <p>Master Physics with curated practice for JEE preparation</p>
+        <Link to="/login" className="cta-button">Get Started</Link>
+      </div>
+
+
+      {/* Lottie Animation */}
+      <div className="lottie-animation">
+        <Lottie animationData={animationData} />
+      </div>
     </div>
   );
 };
-export default LandingPage;
