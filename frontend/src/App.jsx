@@ -1,7 +1,12 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./App.css";
-import Layout from "./Components/Layout";  
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useAuthContext } from "./hooks/useAuthContext";
+import Layout from "./Components/Layout";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
@@ -15,21 +20,44 @@ import LandingPage from "./Components/LandingPage";
 import Question from "./Components/Question";
 
 function App() {
+  const { user } = useAuthContext();
+
   return (
     <Router>
       <Routes>
-        {/* Wrap all routes inside Layout */}
         <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="login" element={<Login />} />
-          <Route path="signup" element={<Signup />} />
-          <Route path="practice" element={<Practice />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="bookmarks" element={<Bookmarks />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="question" element={<Question />} />
-          <Route path="logout" element={<Logout />} />
-          <Route path="add" element={<AddQuestion />} />
+          {/* Public Routes */}
+          <Route
+            index
+            element={!user ? <LandingPage /> : <Navigate to="/home" />}
+          />
+          <Route
+            path="login"
+            element={!user ? <Login /> : <Navigate to="/home" />}
+          />
+          <Route
+            path="signup"
+            element={!user ? <Signup /> : <Navigate to="/home" />}
+          />
+
+          {/* Protected Routes - Only accessible if user is logged in */}
+          {user ? (
+            <>
+              <Route path="/home" element={<Home />} />
+              <Route path="practice" element={<Practice />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="bookmarks" element={<Bookmarks />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="question" element={<Question />} />
+              <Route path="logout" element={<Logout />} />
+              <Route path="add" element={<AddQuestion />} />
+            </>
+          ) : (
+            // Redirect to login if user is not authenticated
+            <>
+              <Route path="*" element={<Navigate to="/" />} />
+            </>
+          )}
         </Route>
       </Routes>
     </Router>

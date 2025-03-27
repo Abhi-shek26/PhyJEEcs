@@ -1,41 +1,29 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useLogin } from "../hooks/useLogin"; // Import the hook
 import "./LoginSignup.css";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login, isLoading, error } = useLogin();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-  try {
-    const response = await fetch("http://localhost:4000/api/user/login", { 
+    const data = await login(email, password);
 
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    let data = {};
-      if (response.headers.get("content-type")?.includes("application/json")) {
-        data = await response.json();
-      }
-    if (!response.ok) {
-      throw new Error(data.error);
+    if (data) {
+      navigate("/home");
     }
-    console.log("Login successful", data);
-  } catch (err) {
-    setError(err.message); // Display error message
-  }
-};
-
+  };
 
   return (
     <div className="auth-container">
       <div className="auth-box">
         <h2>Login</h2>
-        {error && <p className="error-message">{error}</p>} {/* Show error message */}
+        {error && <p className="error-message">{error}</p>}
         <form onSubmit={handleLogin}>
           <input
             type="email"
@@ -56,8 +44,8 @@ const Login = () => {
           <Link to="#" className="auth-link">
             Forgot password?
           </Link>
-          <button type="submit" className="auth-button">
-            Login
+          <button type="submit" className="auth-button" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
         <div className="auth-footer">

@@ -108,5 +108,7 @@
 
   .hamburger {
     display: block;
+    border: none;
+    background: none;
   }
 }
