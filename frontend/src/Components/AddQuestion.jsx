@@ -39,7 +39,7 @@ const AddQuestion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !chapter || !image || !category || !type) {
+    if (!title || !chapter || !image || !category || !type || !correctAnswer) {
       setMessage({ text: "Enter all required fields", color: "red" });
       return;
     }

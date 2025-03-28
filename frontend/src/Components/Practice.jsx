@@ -35,7 +35,6 @@ const Practice = () => {
           },
         }
       );
-      
       const data = await response.json();
       console.log("Fetched Question Data:", data);
       console.log("Correct Answer:", data[currentQuestionIndex].correctAnswer);

@@ -5,6 +5,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import "./App.css";
+
 import { useAuthContext } from "./hooks/useAuthContext";
 import Layout from "./Components/Layout";
 import Home from "./Components/Home";
@@ -20,10 +22,14 @@ import LandingPage from "./Components/LandingPage";
 import Question from "./Components/Question";
 
 function App() {
-  const { user,loading } = useAuthContext();
+  const { user, loading } = useAuthContext();
   console.log("User in App:", user);
 
-  if (loading) return <p style={{ textAlign: "center" }}>Authenticating...</p>; // Wait for authentication check before rendering
+  if (loading) return <div className="loading-screen">
+    <div className="loading-text">
+    <h2>Authenticating...</h2>
+    </div>
+  </div>; // Wait for authentication check before rendering
 
   return (
     <Router>

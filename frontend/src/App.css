@@ -1,3 +1,27 @@
 body {
     font-family: 'Poppins', sans-serif;
 }
+
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    margin: auto;
+    height: 100vh;
+}
+
+.loading-text{
+    height: 200px;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    font-size: 24px;
+    color: #333;
+    animation: fadeIn 1s ease-in-out;
+    animation-delay: 0.5s;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+}
