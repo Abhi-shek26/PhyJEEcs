@@ -1,5 +1,6 @@
 const cloudinary = require("../config/cloudinary");
 const Question = require("../models/Question");
+const Attempt = require("../models/Attempt");
 
 // Upload Question
 exports.uploadQuestion = async (req, res) => {
@@ -85,12 +86,17 @@ exports.getQuestions = async (req, res) => {
 //attemptQuestion
 exports.attemptQuestion = async (req, res) => {
   try {
-    const { questionId, userAnswer } = req.body;
+    const { questionId, userAnswer, timeTaken } = req.body;
+    const userId = req.user._id;
 
     if (!questionId || userAnswer === undefined) {
-      return res
-        .status(400)
-        .json({ error: "Question ID and user answer are required" });
+      return res.status(400).json({ error: "Question ID and user answer are required" });
+    }
+
+    // Check if the user has already attempted this question
+    const existingAttempt = await Attempt.findOne({ userId, questionId });
+    if (existingAttempt) {
+      return res.status(400).json({ error: "You have already attempted this question" });
     }
 
     const question = await Question.findById(questionId);
@@ -99,25 +105,28 @@ exports.attemptQuestion = async (req, res) => {
     let isCorrect = false;
 
     if (question.type === "Single Correct") {
-      isCorrect = question.correctAnswer === userAnswer.trim().toUpperCase();
+      isCorrect = question.correctAnswer.trim().toUpperCase() === userAnswer.trim().toUpperCase();
     } else if (question.type === "Multiple Correct") {
       if (!Array.isArray(userAnswer)) {
-        return res
-          .status(400)
-          .json({ error: "Multiple correct answers must be an array" });
+        return res.status(400).json({ error: "Multiple correct answers must be an array" });
       }
-
       const correctSet = new Set(question.correctAnswer);
-      const userSet = new Set(
-        userAnswer.map((opt) => opt.trim().toUpperCase())
-      );
-
-      isCorrect =
-        correctSet.size === userSet.size &&
-        [...correctSet].every((opt) => userSet.has(opt));
+      const userSet = new Set(userAnswer.map((opt) => opt.trim().toUpperCase()));
+      isCorrect = correctSet.size === userSet.size && [...correctSet].every((opt) => userSet.has(opt));
     } else if (question.type === "Numerical") {
       isCorrect = parseFloat(userAnswer) === question.correctAnswer;
     }
+
+    // Save the attempt
+    const newAttempt = new Attempt({
+      userId,
+      questionId,
+      userAnswer,
+      isCorrect,
+      timeTaken,
+    });
+
+    await newAttempt.save();
 
     res.status(200).json({
       message: isCorrect ? "Correct Answer!" : "Incorrect Answer",
@@ -127,3 +136,4 @@ exports.attemptQuestion = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+

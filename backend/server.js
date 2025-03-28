@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require('./routes/User')
 const questionRoutes = require("./routes/Question");
-
+const attemptRoutes = require("./routes/Attempt");
 
 const app = express();
 
@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 
 app.use("/api/user", userRoutes);
 app.use("/api", questionRoutes);
+app.use("/api/attempts", attemptRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI, {dbName: "PhyJEEcs"})

@@ -1,6 +1,6 @@
 const express = require("express");
 const upload = require("../middleware/multer");
-const { uploadQuestion, getQuestions, attemptQuestion } = require("../controllers/Question");
+const { uploadQuestion, getQuestions, attemptQuestion, } = require("../controllers/Question");
 const requireAuth = require('../middleware/requireAuth');
 
 
