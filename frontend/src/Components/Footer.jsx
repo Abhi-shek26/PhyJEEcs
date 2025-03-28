@@ -9,8 +9,7 @@ const Footer = () => {
         <hr></hr>
       <footer className="footer">
         <div className="footer-links">
-          <Link to="/about">About</Link>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contact">Contact Us</Link>
         </div>
         <p className="footer-text">
           ©{currentYear} phyJEEcs. All rights reserved.
