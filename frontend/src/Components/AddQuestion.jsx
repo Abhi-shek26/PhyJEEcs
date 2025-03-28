@@ -1,40 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+import chapters from "./Chapters";
+import { useAuthContext } from "../hooks/useAuthContext";
 import "./AddQuestion.css";
 
-const chapters = [
-  "0.Basic Mathematics",
-  "1.Units and Dimensions",
-  "2.Kinematics",
-  "3.Newton's Laws of Motion",
-  "4.Work, Energy and Power",
-  "5.Circular Motion",
-  "6.Centre of Mass, Impulse and Momentum",
-  "7.Rotational Motion",
-  "8.Gravitation",
-  "9.Elasticity",
-  "10.Fluids",
-  "11.SHM",
-  "12.String Waves",
-  "13.Sound Waves",
-  "14.Thermal Properties of Matter",
-  "15.KTG",
-  "16.Thermodynamics",
-  "17.Electrostatics and Potential",
-  "18.Capacitance",
-  "19.Current Electricity",
-  "20.Magnetic Effects of Current",
-  "21.EMI",
-  "22.AC",
-  "23.Ray Optics",
-  "24.Wave Optics",
-  "25.Modern Physics",
-  "26.EM Waves",
-  "27.Semiconductors",
-  "28.Errors and Experiments",
-];
-
 const AddQuestion = () => {
+  const { user } = useAuthContext();
+  console.log("User in AddQuestion:", user);
+
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("JEE Mains");
   const [type, setType] = useState("Single Correct");
@@ -86,7 +59,10 @@ const AddQuestion = () => {
         "http://localhost:4000/api/upload",
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${user.token}`,
+          },
         }
       );
 

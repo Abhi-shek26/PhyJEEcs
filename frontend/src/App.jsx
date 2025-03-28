@@ -20,7 +20,10 @@ import LandingPage from "./Components/LandingPage";
 import Question from "./Components/Question";
 
 function App() {
-  const { user } = useAuthContext();
+  const { user,loading } = useAuthContext();
+  console.log("User in App:", user);
+
+  if (loading) return <p style={{ textAlign: "center" }}>Authenticating...</p>; // Wait for authentication check before rendering
 
   return (
     <Router>
@@ -43,7 +46,7 @@ function App() {
           {/* Protected Routes - Only accessible if user is logged in */}
           {user ? (
             <>
-              <Route path="/home" element={<Home />} />
+              <Route path="home" element={<Home />} />
               <Route path="practice" element={<Practice />} />
               <Route path="profile" element={<Profile />} />
               <Route path="bookmarks" element={<Bookmarks />} />
