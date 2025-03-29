@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useLogin } from "../hooks/useLogin"; // Import the hook
+import { useLogin } from "../hooks/useLogin";
 import "./LoginSignup.css";
 
 const Login = () => {
@@ -12,11 +12,16 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
     const data = await login(email, password);
-
-    if (data) {
-      navigate("/home");
+    
+    if (!data) {
+      console.error("Login failed");
+      return;
     }
+
+    console.log("Login successful:", data);
+    navigate("/home");
   };
 
   return (
@@ -24,6 +29,7 @@ const Login = () => {
       <div className="auth-box">
         <h2>Login</h2>
         {error && <p className="error-message">{error}</p>}
+        
         <form onSubmit={handleLogin}>
           <input
             type="email"
@@ -33,6 +39,7 @@ const Login = () => {
             required
             className="auth-input"
           />
+          
           <input
             type="password"
             placeholder="Password"
@@ -41,13 +48,16 @@ const Login = () => {
             required
             className="auth-input"
           />
+
           <Link to="#" className="auth-link">
             Forgot password?
           </Link>
+
           <button type="submit" className="auth-button" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
+
         <div className="auth-footer">
           Not a member? <Link to="/signup">Signup now</Link>
         </div>

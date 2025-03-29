@@ -1,40 +1,35 @@
-import { createContext, useReducer, useEffect, useState } from 'react'
+import { createContext, useReducer, useEffect, useState } from "react";
 
-export const AuthContext = createContext()
+export const AuthContext = createContext();
 
 export const authReducer = (state, action) => {
   switch (action.type) {
-    case 'LOGIN':
-      return { user: action.payload }
-    case 'LOGOUT':
-      return { user: null }
+    case "LOGIN":
+      return { user: action.payload };
+    case "LOGOUT":
+      return { user: null };
     default:
-      return state
+      return state;
   }
-}
+};
 
 export const AuthContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(authReducer, { 
-    user: null
-  })
-  const [loading, setLoading] = useState(true); // NEW: Loading state
+  const [state, dispatch] = useReducer(authReducer, { user: null });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'))
+    const user = JSON.parse(localStorage.getItem("user"));
 
     if (user) {
-      dispatch({ type: 'LOGIN', payload: user }) 
+      dispatch({ type: "LOGIN", payload: user });
     }
 
-    setLoading(false); // Set loading to false after checking auth state
-  }, [])
+    setLoading(false);
+  }, []);
 
-  console.log('AuthContext state:', state)
-  
   return (
     <AuthContext.Provider value={{ ...state, dispatch, loading }}>
-      { children }
+      {children}
     </AuthContext.Provider>
-  )
-
-}
+  );
+};

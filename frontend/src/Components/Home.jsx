@@ -5,7 +5,10 @@ const Home = () => {
   return (
     <div>
     <h1>Home</h1>
-    <p>Welcome to PhyJEEcs, {user.email}</p>
+    <p>Welcome to PhyJEEcs</p>
+    <p>{user.name}</p>
+    <p>{user.email}</p>
+    <p>{user.year}</p>
     </div>
   )
 }

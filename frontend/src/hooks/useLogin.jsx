@@ -7,37 +7,39 @@ export const useLogin = () => {
   const { dispatch } = useAuthContext();
 
   const login = async (email, password) => {
-    setIsLoading(true);
-    setError(null);
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const response = await fetch("http://localhost:4000/api/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      try {
+          const response = await fetch("http://localhost:4000/api/user/login", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+          });
 
-      let data = {};
-      if (response.headers.get("content-type")?.includes("application/json")) {
-        data = await response.json();
+          if (!response.ok) {
+              throw new Error("Invalid email or password");
+          }
+
+          const data = await response.json();
+
+          const userData = {
+              id: data.id,
+              name: data.name,
+              email: data.email,
+              year: data.year,
+              token: data.token,
+          };
+
+          localStorage.setItem("user", JSON.stringify(userData));
+          dispatch({ type: "LOGIN", payload: userData });
+
+          setIsLoading(false);
+          return userData;
+      } catch (err) {
+          setIsLoading(false);
+          setError(err.message);
       }
-
-      if (!response.ok) {
-        throw new Error(data.error);
-      }
-
-      // Save user to local storage
-      localStorage.setItem("user", JSON.stringify(data));
-
-      // Update auth context
-      dispatch({ type: "LOGIN", payload: data });
-
-      setIsLoading(false);
-      return data; // Returning user data for further processing if needed
-    } catch (err) {
-      setIsLoading(false);
-      setError(err.message);
-    }
   };
 
   return { login, isLoading, error };
