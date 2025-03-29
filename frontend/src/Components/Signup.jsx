@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { useSignup } from "../hooks/useSignup"; // Import the hook
+import { useSignup } from "../hooks/useSignup";
 import "./LoginSignup.css";
 
 const Signup = () => {
-  const navigate = useNavigate();
   const { signup, isLoading, error } = useSignup();
-
+  
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [year, setYear] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    
     const data = await signup(name, email, password, confirmPassword, year);
     
     if (data) {
-      window.alert("Signup successful, please login to continue");
-      navigate("/login");
+      console.log("Signup successful:", data);
+    } else {
+      console.error("Signup failed");
     }
   };
 
@@ -29,6 +29,7 @@ const Signup = () => {
       <div className="auth-box">
         <h2>Signup</h2>
         {error && <p className="error-message">{error}</p>}
+        
         <form onSubmit={handleSignup}>
           <input
             type="email"
@@ -38,6 +39,7 @@ const Signup = () => {
             required
             className="auth-input"
           />
+          
           <input
             type="text"
             placeholder="Enter your name"
@@ -46,6 +48,7 @@ const Signup = () => {
             required
             className="auth-input"
           />
+          
           <select
             value={year}
             onChange={(e) => setYear(e.target.value)}
@@ -57,6 +60,7 @@ const Signup = () => {
             <option value="12">12</option>
             <option value="Dropper">Dropper</option>
           </select>
+
           <input
             type="password"
             placeholder="Password"
@@ -65,6 +69,7 @@ const Signup = () => {
             required
             className="auth-input"
           />
+
           <input
             type="password"
             placeholder="Confirm Password"
@@ -73,10 +78,12 @@ const Signup = () => {
             required
             className="auth-input"
           />
+
           <button type="submit" className="auth-button" disabled={isLoading}>
             {isLoading ? "Signing up..." : "Signup"}
           </button>
         </form>
+
         <div className="auth-footer">
           Already a member? <Link to="/login">Login</Link>
         </div>
