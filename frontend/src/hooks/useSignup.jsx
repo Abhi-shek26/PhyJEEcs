@@ -23,11 +23,10 @@ export const useSignup = () => {
               body: JSON.stringify({ name, email, password, year }),
           });
 
-          if (!response.ok) {
-              throw new Error("Signup failed. Try again.");
-          }
-
           const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "Signup failed. Try again.");
+            }
 
           const userData = {
               id: data.id,
