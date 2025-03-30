@@ -85,6 +85,10 @@ exports.getQuestions = async (req, res) => {
 
 //attemptQuestion
 exports.attemptQuestion = async (req, res) => {
+
+  // console.log("Received attempt data:", req.body);
+  // console.log("User ID:", req.user?._id);
+
   try {
     const { questionId, userAnswer, timeTaken } = req.body;
     const userId = req.user._id;
