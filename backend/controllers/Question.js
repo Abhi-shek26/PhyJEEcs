@@ -65,27 +65,31 @@ exports.uploadQuestion = async (req, res) => {
   }
 };
 
-
 // Fetch Questions
 exports.getQuestions = async (req, res) => {
   try {
-    const { category, type, chapter } = req.query;
+    const { title, category, type, chapter } = req.query;
 
     const filter = {};
+    if (title) filter.title = { $regex: `^${title}$`, $options: "i" };
     if (category) filter.category = category;
     if (type) filter.type = type;
     if (chapter) filter.chapter = chapter;
 
-    const questions = await Question.find(filter).sort({ createdAt: -1 }); // Latest questions first
+    console.log("Filter applied:", filter); // Debugging output
+
+    const questions = await Question.find(filter).sort({ createdAt: -1 });
+
+    console.log("Questions found:", questions.length); // Debugging output
     res.status(200).json(questions);
   } catch (err) {
+    console.error("Error fetching questions:", err);
     res.status(500).json({ error: err.message });
   }
 };
 
 //attemptQuestion
 exports.attemptQuestion = async (req, res) => {
-
   // console.log("Received attempt data:", req.body);
   // console.log("User ID:", req.user?._id);
 
@@ -94,13 +98,17 @@ exports.attemptQuestion = async (req, res) => {
     const userId = req.user._id;
 
     if (!questionId || userAnswer === undefined) {
-      return res.status(400).json({ error: "Question ID and user answer are required" });
+      return res
+        .status(400)
+        .json({ error: "Question ID and user answer are required" });
     }
 
     // Check if the user has already attempted this question
     const existingAttempt = await Attempt.findOne({ userId, questionId });
     if (existingAttempt) {
-      return res.status(400).json({ error: "You have already attempted this question" });
+      return res
+        .status(400)
+        .json({ error: "You have already attempted this question" });
     }
 
     const question = await Question.findById(questionId);
@@ -109,14 +117,22 @@ exports.attemptQuestion = async (req, res) => {
     let isCorrect = false;
 
     if (question.type === "Single Correct") {
-      isCorrect = question.correctAnswer.trim().toUpperCase() === userAnswer.trim().toUpperCase();
+      isCorrect =
+        question.correctAnswer.trim().toUpperCase() ===
+        userAnswer.trim().toUpperCase();
     } else if (question.type === "Multiple Correct") {
       if (!Array.isArray(userAnswer)) {
-        return res.status(400).json({ error: "Multiple correct answers must be an array" });
+        return res
+          .status(400)
+          .json({ error: "Multiple correct answers must be an array" });
       }
       const correctSet = new Set(question.correctAnswer);
-      const userSet = new Set(userAnswer.map((opt) => opt.trim().toUpperCase()));
-      isCorrect = correctSet.size === userSet.size && [...correctSet].every((opt) => userSet.has(opt));
+      const userSet = new Set(
+        userAnswer.map((opt) => opt.trim().toUpperCase())
+      );
+      isCorrect =
+        correctSet.size === userSet.size &&
+        [...correctSet].every((opt) => userSet.has(opt));
     } else if (question.type === "Numerical") {
       isCorrect = parseFloat(userAnswer) === question.correctAnswer;
     }
@@ -140,4 +156,3 @@ exports.attemptQuestion = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-

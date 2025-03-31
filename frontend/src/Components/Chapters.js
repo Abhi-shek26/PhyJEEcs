@@ -5,7 +5,7 @@ const chapters = [
   "3.Newton's Laws of Motion",
   "4.Work, Energy and Power",
   "5.Circular Motion",
-  "6.Centre of Mass, Impulse and Momentum",
+  "6.Centre of Mass",
   "7.Rotational Motion",
   "8.Gravitation",
   "9.Elasticity",
