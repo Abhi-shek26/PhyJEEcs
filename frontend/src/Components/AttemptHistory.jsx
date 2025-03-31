@@ -1,4 +1,6 @@
+import React, { useState } from "react";
 import { useFetchAttempts } from "../hooks/useFetchAttempts";
+import './AttemptHistory.css';
 
 const formatTimestamp = (timestamp) => {
   const date = new Date(timestamp);
@@ -19,56 +21,78 @@ const formatTimestamp = (timestamp) => {
 
 const AttemptHistory = () => {
   const { attempts, isLoading } = useFetchAttempts();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  if (isLoading) return <p>Loading your attempts...</p>;
+const currentAttempt = attempts[currentIndex];
 
-  return (
-    <div>
-      <div>
-        <h2>Your Attempt History</h2>
-        {attempts.length === 0 ? (
-          <p>No attempts yet. Start practicing!</p>
-        ) : (
-          <ul>
-            {attempts.map((attempt) => (
-              <li
-                key={attempt._id}
-                style={{ borderBottom: "1px solid #ddd", padding: "10px" }}
-              >
-                <h4>{attempt.questionId?.title || "Question Title"}</h4>
+  return isLoading ? (
+    
+    <p className="loading-text">Loading your attempts...</p>
+   )  : !attempts || attempts.length === 0 ? (
+          <p className="empty-text">No attempts yet. Start practicing!</p>
+         ) : (
+         <>
+          <h2>Your Attempt History</h2>
+          <div className="attempt-history">
+          <div className="nav-header">
+          <button
+          onClick={() => setCurrentIndex((prev) => prev - 1)}
+          disabled={currentIndex === 0}
+          className="nav-button"
+          >
+          &#8678;
+          </button>
+
+          <span className="nav-text">{currentIndex + 1} of {attempts.length}</span>
+
+         <button
+          onClick={() => setCurrentIndex((prev) => prev + 1)}
+          disabled={currentIndex === attempts.length - 1}
+          className="nav-button"
+         >
+          &#8680;
+         </button>
+         </div>
+          <div className={`attempt-card ${currentAttempt.isCorrect ? "correct" : "incorrect"}`}>
+           <span className="question-title">{currentAttempt.questionId?.title || 'Question Title'}</span>
+
+           <img
+            src={currentAttempt.questionId?.imageUrl}
+            alt="Attempt Image"
+            className="attempt-image"
+            onClick={() => setIsModalOpen(true)}
+           />
+
+           {isModalOpen && (
+              <div className="image-modal" onClick={() => setIsModalOpen(false)}>
                 <img
-                  src={attempt.questionId.imageUrl}
-                  alt="Attempt Image"
-                  style={{
-                    maxWidth: "100%",
-                    height: "auto",
-                    objectFit: "contain",
-                    display: "block",
-                    margin: "0 auto",
-                  }}
+                  src={currentAttempt.questionId.imageUrl}
+                  alt="Enlarged Attempt Image"
+                  className="modal-image"
                 />
-                <p>
-                  <strong>Result</strong> {attempt.isCorrect ? "✅" : "❌"}
-                </p>
-                <p>
-                  <strong>Your Answer</strong> {attempt.userAnswer}
-                </p>
-                <p>
-                  <strong> Correct Answer</strong> {attempt.questionId.correctAnswer}
-                </p>
-                <p>
-                  <strong>Time Taken:</strong> {attempt.timeTaken} seconds
-                </p>
-                <p>
-                  <strong>Attempted on:</strong>{" "}
-                  {formatTimestamp(attempt.attemptedAt)}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
+              </div>
+            )}
+          
+             <div className="info-grid">
+                <div>
+                  <strong>Your Answer:</strong> {currentAttempt.userAnswer}
+                </div>
+                <div>
+                  <strong> Correct Answer:</strong> {currentAttempt.questionId.correctAnswer}
+                </div>
+                <div className={` ${currentAttempt.isCorrect ? "correct-btn" : "incorrect-btn"}`}>
+                  {currentAttempt.isCorrect ? "Correct" : "Incorrect"}
+                </div>
+                <div>
+                  <strong>Time Taken:</strong> {currentAttempt.timeTaken} sec
+                </div>
+                &nbsp; <p className="attempted-on">Attempted on: {formatTimestamp(currentAttempt.attemptedAt)}</p>
+                
+               </div>
+            </div>
+          </div>
+         </>
   );
 };
 

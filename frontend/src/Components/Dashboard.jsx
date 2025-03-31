@@ -1,13 +1,18 @@
 import React from 'react'
-import AttemptHistory from './AttemptHistory';
+import { useNavigate } from 'react-router-dom'
 
 
 const Dashboard = () => {  
+  const navigate = useNavigate();
+
+  const handleViewHistory = () => {
+    navigate('/history');
+  };
   return (
     <div>
       <h1>Dashboard</h1>
       <p>Dashboard page content goes here.</p>
-      <AttemptHistory/>
+      <button onClick={handleViewHistory}>View Attempt History</button>
     </div>
   )
 }
