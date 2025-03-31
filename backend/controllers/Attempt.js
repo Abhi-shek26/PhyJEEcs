@@ -4,7 +4,7 @@ const Attempt = require("../models/Attempt");
 exports.getUserAttempts = async (req, res) => {
     try {
       const userId = req.user._id;
-      const attempts = await Attempt.find({ userId }).populate("questionId", "text type correctAnswer");
+      const attempts = await Attempt.find({ userId }).populate("questionId", "title text type correctAnswer");
   
       res.status(200).json(attempts);
     } catch (err) {
