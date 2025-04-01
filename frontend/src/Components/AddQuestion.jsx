@@ -1,12 +1,153 @@
-import React from 'react'
+import { useState } from "react";
+import { useAddQuestion } from "../hooks/useAddQuestion";
+import chapters from "./chapters";
+import "./AddQuestion.css";
 
 const AddQuestion = () => {
-  return (
-    <div>
-      <h1>Add Question</h1>
-      <p>Add Question page content goes here.</p>
-    </div>
-  )
-}
+  const { uploadQuestion, loading, error } = useAddQuestion();
+  const [form, setForm] = useState({
+    title: "",
+    category: "",
+    type: "",
+    chapter: "",
+    correctAnswer: "",
+    image: null,
+  });
 
-export default AddQuestion
+  const [imagePreview, setImagePreview] = useState(null);
+
+  // Handle input/select change
+  const handleChange = (e) => {
+    setForm((prevForm) => ({
+      ...prevForm,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  // Handle file selection
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setForm((prevForm) => ({ ...prevForm, image: file }));
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!form.title || !form.chapter || !form.correctAnswer || !form.image) {
+      alert("All fields are required!");
+      return;
+    }
+
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => formData.append(key, value));
+
+    const result = await uploadQuestion(formData);
+    if (result) {
+      alert("Question added successfully!");
+      setForm({
+        title: "",
+        category: "JEE Mains",
+        type: "Single Correct",
+        chapter: "",
+        correctAnswer: "",
+        image: null,
+      });
+      setImagePreview(null);
+    }
+  };
+
+  return (
+    <div className="form-container">
+      <h2 className="form-title">Add Question</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="input-group">
+          <input
+            type="text"
+            name="title"
+            placeholder="Question ID"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <select name="category" value={form.category} onChange={handleChange}>
+            <option value="" disabled>
+              Select Category
+            </option>
+            <option value="JEE Mains">JEE Mains</option>
+            <option value="JEE Advanced">JEE Advanced</option>
+          </select>
+        </div>
+
+        <div className="input-group">
+          <select name="type" value={form.type} onChange={handleChange}>
+            <option value="" disabled>
+              Select Type
+            </option>
+            <option value="Single Correct">Single Correct</option>
+            <option value="Multiple Correct">Multiple Correct</option>
+            <option value="Numerical">Numerical</option>
+          </select>
+        </div>
+
+        <div className="input-group">
+          <select
+            name="chapter"
+            value={form.chapter}
+            onChange={handleChange}
+            required
+          >
+            <option value="" disabled>
+              Select Chapter
+            </option>
+            {chapters.map((chapter, index) => (
+              <option key={index} value={chapter}>
+                {chapter}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            name="correctAnswer"
+            placeholder="Correct Answer"
+            value={form.correctAnswer}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="file-input-container">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            required
+          />
+        </div>
+
+        {imagePreview && (
+          <div className="image-preview">
+            <img src={imagePreview} alt="Preview" />
+          </div>
+        )}
+
+        <button className="Submit-button" type="submit" disabled={loading}>
+          {loading ? "Uploading..." : "Upload"}
+        </button>
+
+        {error && <p className="error-message">{error}</p>}
+      </form>
+    </div>
+  );
+};
+
+export default AddQuestion;
