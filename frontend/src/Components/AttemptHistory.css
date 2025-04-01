@@ -7,35 +7,36 @@
     padding: 20px;
   }
   
-  .nav-header {
+  .navig-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
   }
   
-  .nav-text {
+  .navig-text {
     font-size: 16px;
     font-weight: bold;
     color: #333;
   }
 
-  .nav-button {
+  .navig-btn {
     background-color: transparent;
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: #007bff;
     transition: color 0.3s;
   }
   
-  .nav-button:disabled {
+  .navig-btn:disabled {
     color: #ccc;
     cursor: not-allowed;
+    background-color: #fff;
   }
   
-  .nav-button:hover:not(:disabled) {
+  .navig-btn:hover:not(:disabled) {
     color: #0056b3;
+    background-color: #fff;
   }
   
   .attempt-card {
@@ -159,4 +160,8 @@
     color: #555;
     padding: 5px 10px;
     margin:auto;
+  }
+
+  .loadingHistory-text {
+    text-align: center;
   }

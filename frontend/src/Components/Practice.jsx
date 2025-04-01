@@ -14,6 +14,9 @@ const Practice = () => {
     chapter: "",
   });
 
+  // Check if at least one filter is filled
+  const isFilterFilled = Object.values(filters).some((val) => val.trim() !== "");
+
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
@@ -52,7 +55,7 @@ const Practice = () => {
             </option>
           ))}
         </select>
-        <button onClick={handleFetch}>Fetch Questions</button>
+        <button onClick={handleFetch} disabled={!isFilterFilled}>Fetch Questions</button>
 
         <h2>Fetched Questions</h2>
         {questions.length > 0 ? (

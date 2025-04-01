@@ -1,12 +1,14 @@
-import { createContext, useReducer, useState } from "react";
+import { createContext, useReducer } from "react";
 
 export const QuestionContext = createContext();
 
 const questionReducer = (state, action) => {
   switch (action.type) {
     case "SET_QUESTIONS":
-      const newState = { ...state, questions: action.payload };
-      return newState;
+      return { ...state, questions: action.payload };
+
+    case "ADD_QUESTION":
+      return { ...state, questions: [action.payload, ...state.questions] };
 
     default:
       return state;
@@ -20,8 +22,13 @@ const initialState = {
 export const QuestionProvider = ({ children }) => {
   const [state, dispatch] = useReducer(questionReducer, initialState);
 
+  // Function to add a new question
+  const addQuestion = (newQuestion) => {
+    dispatch({ type: "ADD_QUESTION", payload: newQuestion });
+  };
+
   return (
-    <QuestionContext.Provider value={{ ...state, dispatch }}>
+    <QuestionContext.Provider value={{ ...state, dispatch, addQuestion }}>
       {children}
     </QuestionContext.Provider>
   );

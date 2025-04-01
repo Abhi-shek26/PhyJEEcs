@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useFetchAttempts } from "../hooks/useFetchAttempts";
+import { GrLinkNext } from "react-icons/gr";
+import { GrLinkPrevious } from "react-icons/gr";
 import './AttemptHistory.css';
 
 const formatTimestamp = (timestamp) => {
@@ -28,30 +30,30 @@ const currentAttempt = attempts[currentIndex];
 
   return isLoading ? (
     
-    <p className="loading-text">Loading your attempts...</p>
+    <p className="loadingHistory-text">Loading your attempts...</p>
    )  : !attempts || attempts.length === 0 ? (
           <p className="empty-text">No attempts yet. Start practicing!</p>
          ) : (
          <>
           <h2>Your Attempt History</h2>
           <div className="attempt-history">
-          <div className="nav-header">
+          <div className="navig-header">
           <button
           onClick={() => setCurrentIndex((prev) => prev - 1)}
           disabled={currentIndex === 0}
-          className="nav-button"
+          className="navig-btn"
           >
-          &#8678;
+          <GrLinkPrevious />
           </button>
 
-          <span className="nav-text">{currentIndex + 1} of {attempts.length}</span>
+          <span className="navig-text">{currentIndex + 1} of {attempts.length}</span>
 
          <button
           onClick={() => setCurrentIndex((prev) => prev + 1)}
           disabled={currentIndex === attempts.length - 1}
-          className="nav-button"
+          className="navig-btn"
          >
-          &#8680;
+          <GrLinkNext />
          </button>
          </div>
           <div className={`attempt-card ${currentAttempt.isCorrect ? "correct" : "incorrect"}`}>
@@ -76,7 +78,7 @@ const currentAttempt = attempts[currentIndex];
           
              <div className="info-grid">
                 <div>
-                  <strong>Your Answer:</strong> {currentAttempt.userAnswer}
+                  <strong>Your Answer: </strong> {currentAttempt.userAnswer}
                 </div>
                 <div>
                   <strong> Correct Answer:</strong> {currentAttempt.questionId.correctAnswer}
@@ -85,7 +87,7 @@ const currentAttempt = attempts[currentIndex];
                   {currentAttempt.isCorrect ? "Correct" : "Incorrect"}
                 </div>
                 <div>
-                  <strong>Time Taken:</strong> {currentAttempt.timeTaken} sec
+                  <strong>Time Taken: </strong> {currentAttempt.timeTaken} sec
                 </div>
                 &nbsp; <p className="attempted-on">Attempted on: {formatTimestamp(currentAttempt.attemptedAt)}</p>
                 
