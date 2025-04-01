@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const attemptSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-  title: {type: String, ref: "Question", required: true},
-  imageUrl: {type: String, ref: "Question", required: true},
+  title: {type: String, ref: "Question",},
+  imageUrl: {type: String, ref: "Question", },
   questionId: { type: mongoose.Schema.Types.ObjectId, ref: "Question", required: true },
   userAnswer: { type: mongoose.Schema.Types.Mixed, required: true },
   isCorrect: { type: Boolean, required: true },
