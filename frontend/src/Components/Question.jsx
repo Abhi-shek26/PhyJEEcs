@@ -1,75 +1,54 @@
 import React, { useState } from "react";
 import "./Question.css";
+import { useFetchAttempts } from "../hooks/useFetchAttempts";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Question = ({ question }) => {
-  const [expanded, setExpanded] = useState(false);
+  const { user } = useAuthContext();
+ const { attempts } = useFetchAttempts();
 
-  const toggleImage = () => {
-    setExpanded(!expanded);
-  };
-
+ console.log(attempts);
   return (
-    <div className="question-container">
-      <div className="question-header">
-        <span className="question-id">{question.title}</span>
-        <div className="chips">
-          <span key={question._id} className="chip">
-            {question.chapter}
-          </span>
-          <span key={question._id + 1} className="chip">
-            {question.category}
-          </span>
-          <span key={question._id + 2} className="chip">
-            {question.type}
-          </span>
-        </div>
-        <div className="icons">
-          <span className="icon">🔖</span>
-          <span className="icon">💬</span>
-        </div>
-      </div>
+    <div style={{ padding: "20px", border: "1px solid #ccc", borderRadius: "5px", margin: "10px" }}>
+      <p>{question.title}</p>
+      <p>{question.imageUrl}</p>
+      <p>{question.type}</p>
+      <p>{question.category}</p>
+      <p>{question.correctAnswer}</p>
+      <p>{question._id}</p>
+      {attempts.some(q => q.questionId._id === question._id) ? "Attempted" : 
+  <button 
+    onClick={async () => { 
+      const attemptData = {
+        questionId: question._id,
+        userAnswer: "D", 
+        timeTaken: 30, 
+      };
 
-      <div className="question-image-container" onClick={toggleImage}>
-        <img
-          src={question.imageUrl}
-          alt="Question"
-          className={`question-image ${expanded ? "expanded" : ""}`}
-        />
-      </div>
+      try {
+        const response = await fetch(`http://localhost:4000/api/attempt`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(attemptData), 
+        });
 
-      <div className="options-container">
-        {question.type === "Single Correct" ||
-        question.type === "Multiple Correct" ? (
-          <>
-            <div key="A" className="option">
-              A
-            </div>
-            <div key="B" className="option">
-              B
-            </div>
-            <div key="C" className="option">
-              C
-            </div>
-            <div key="D" className="option">
-              D
-            </div>
-          </>
-        ) : (
-          <div>
-            <input
-              type="text"
-              placeholder="Enter your answer"
-              className="answer-input"
-            />
-          </div>
-        )}
-      </div>
+        const data = await response.json();
 
-      <div className="bottom-bar">
-        <button className="attempt-button">Attempt</button>
-        <span className="timer">Time Left: 01:30</span>
-        <button className="submit-button">Submit</button>
-      </div>
+        if (!response.ok) throw new Error(data.error || "Failed to attempt");
+        
+        console.log("Attempt recorded:", data); 
+
+      } catch (error) {
+        console.error("Error submitting attempt:", error);
+      }
+    }}
+  >
+    Attempt
+  </button>
+}
     </div>
   );
 };
