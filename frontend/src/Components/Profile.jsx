@@ -13,7 +13,7 @@ const StudentProfile = () => {
     <div className="container">
       <div className="profile-card">
         <div className="avatar-container">
-          <div className="avatar">{user.email.charAt(0)}</div>
+          <div className="avatar">{user.name.charAt(0).toUpperCase()}</div>
           <h2 className="name">{user.name}</h2>
         </div>
         <p className="info">
@@ -22,7 +22,6 @@ const StudentProfile = () => {
         <p className="info">
           <strong>Email:</strong> {user.email}
         </p>
-        {/* <p className="info"><strong>Password:</strong> {user.token}</p> */}
         <button onClick={handleResetPassword} className="reset-button">
           Reset Password
         </button>
