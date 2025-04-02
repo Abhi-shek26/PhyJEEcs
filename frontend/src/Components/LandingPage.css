@@ -5,8 +5,10 @@
   align-items: center;
   text-align: center;
   padding-top: 30px;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   margin-top: 10px;
+  /* background: linear-gradient(to right, #0f88f1, #0056b3); */
+  /* color: white; */
 }
 
 .hero h1 {
@@ -19,10 +21,64 @@
   margin-bottom: 40px;
 }
 
+.features {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+.feature-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(168, 164, 164);
+}
+
+.feature-title {
+  padding: 10px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.feature-description {
+  margin-top: 5px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0px 15px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  font-size: 1.1rem;
+  line-height: 1.5;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s;
+}
+
+.feature-item.active .feature-description {
+  max-height: 150px;
+  opacity: 1;
+  padding: 15px;
+}
+
+.feature-item h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
 .cta-button {
-  background-color: #0f88f1;
+  background-color: #5271ff;
   color: white;
   padding: 15px 30px;
+  margin: 2.5rem;
   font-size: 1.2rem;
   border-radius: 10px;
   text-decoration: none;
@@ -31,6 +87,7 @@
 
 .cta-button:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 @media (max-width: 768px) {
@@ -42,8 +99,39 @@
     font-size: 1.2rem;
   }
 
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+  .feature-item h2 {
+    font-size: 1.3rem;
+  }
+
   .cta-button {
     padding: 12px 24px;
     font-size: 1rem;
   }
 }
+
+.video-container {
+  text-align: center;
+}
+
+.video-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.demo-video {
+  width: 100%;
+  max-width: 700px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  outline: none;
+  transition: 0.3s ease-in-out;
+}
+
+.demo-video:hover {
+  box-shadow: 0px 0px 10px 5px #5271ff, 0px 0px 20px 10px #5271ff;
+  transform: scale(1.02);
+} 
