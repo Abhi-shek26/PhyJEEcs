@@ -9,7 +9,7 @@ const Layout = () => {
     <>
       <Navbar />
       <main className="content">
-        <Outlet />  {/* This dynamically renders the current page */}
+        <Outlet />  
       </main>
       <Footer />
     </>
