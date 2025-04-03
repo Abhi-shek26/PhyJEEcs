@@ -1,20 +1,24 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
 
-
-const Dashboard = () => {  
+const Dashboard = () => {
   const navigate = useNavigate();
-
+  const { user } = useAuthContext();
   const handleViewHistory = () => {
-    navigate('/history');
+    navigate("/history");
   };
+
   return (
     <div>
-      <h1>Dashboard</h1>
-      <p>Dashboard page content goes here.</p>
+      <div className="user-details">
+        <p>{user.name}</p>
+        <p>{user.email}</p>
+        <p>{user.year}</p>
+      </div>
       <button onClick={handleViewHistory}>View Attempt History</button>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

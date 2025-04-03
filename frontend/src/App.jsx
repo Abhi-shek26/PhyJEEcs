@@ -39,27 +39,25 @@ function App() {
           {/* Public Routes */}
           <Route
             index
-            element={!user ? <LandingPage /> : <Navigate to="/home" />}
+            element={!user ? <LandingPage /> : <Navigate to="/dashboard" />}
           />
           <Route
             path="login"
-            element={!user ? <Login /> : <Navigate to="/home" />}
+            element={!user ? <Login /> : <Navigate to="/dashboard" />}
           />
           <Route
             path="signup"
-            element={!user ? <Signup /> : <Navigate to="/home" />}
+            element={!user ? <Signup /> : <Navigate to="/dashboard" />}
           />
 
           {/* Protected Routes - Only accessible if user is logged in */}
           {user ? (
             <>
-              <Route path="home" element={<Home />} />
               <Route path="practice" element={<Practice />} />
               <Route path="/history" element={<AttemptHistory />} />
               <Route path="profile" element={<Profile />} />
               <Route path="bookmarks" element={<Bookmarks />} />
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="question" element={<Question />} />
               <Route path="logout" element={<Logout />} />
               <Route path="add" element={<AddQuestion />} />
             </>

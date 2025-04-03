@@ -24,7 +24,6 @@ const Navbar = () => {
       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
         {user ? (
           <>
-            <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/practice">Practice</NavLink>
 
             {/* Profile Dropdown */}
