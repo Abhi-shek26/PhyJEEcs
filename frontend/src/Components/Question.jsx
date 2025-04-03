@@ -14,7 +14,7 @@ const Question = ({ question }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Check if this question has already been attempted
-  const isAttempted = attempts.some(q => q.questionId._id === question._id);
+  const isAttempted = attempts.some((q) => q.questionId._id === question._id);
 
   // Handle option selection
   const handleOptionSelect = (option) => {
@@ -22,21 +22,19 @@ const Question = ({ question }) => {
       setSelectedOptions([option]); // Only one selection allowed
     } else if (question.type === "Multiple Correct") {
       setSelectedOptions((prev) =>
-        prev.includes(option)
-          ? prev.filter((item) => item !== option) // Deselect if already selected
-          : [...prev, option]
+        prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
       );
     }
   };
 
   // Handle attempt button click
   const handleAttempt = () => {
-    setIsAttempting(true); // Enable options & timer
+    setIsAttempting(true);
     setIsSubmitted(false);
   };
 
   // Handle submit button click
-  const handleSubmit = async (finalTimeTaken) => { // Accept time as parameter
+  const handleSubmit = async (finalTimeTaken) => {
     setIsAttempting(false);
     setIsSubmitted(true);
 
@@ -46,7 +44,7 @@ const Question = ({ question }) => {
     } else if (question.type === "Single Correct") {
       userAnswer = selectedOptions.length > 0 ? selectedOptions[0] : "";
     } else if (question.type === "Multiple Correct") {
-      userAnswer = selectedOptions.length > 0 ? selectedOptions.map(opt => opt.trim().toUpperCase()) : [];
+      userAnswer = selectedOptions.length > 0 ? selectedOptions.map((opt) => opt.trim().toUpperCase()) : [];
     }
 
     console.log("Submitting attempt with:", { userAnswer, finalTimeTaken });
@@ -54,7 +52,7 @@ const Question = ({ question }) => {
     const attemptData = {
       questionId: question._id,
       userAnswer,
-      timeTaken: finalTimeTaken, // Ensure the correct time is sent
+      timeTaken: finalTimeTaken,
     };
 
     try {
@@ -77,57 +75,72 @@ const Question = ({ question }) => {
   };
 
   return (
-    <div style={{ padding: "20px", border: "1px solid #ccc", borderRadius: "5px", margin: "10px" }}>
-      <p>{question.title}</p>
-      <p>{question.imageUrl}</p>
-      <p>{question.type}</p>
-      <p>{question.category}</p>
-      <p>{question.correctAnswer}</p>
-      <p>{question._id}</p>
+    <div className="question-container">
+      {/* Header Row: Question ID, Chips, Bookmark, Feedback */}
+      <div className="question-header">
+        <span className="question-id">QID: {question._id}</span>
+        <div className="question-tags">
+          <span className="chip">{question.type}</span>
+          <span className="chip">{question.chapter}</span>
+          <span className="chip">{question.category}</span>
+        </div>
+        <div className="question-actions">
+          <button className="bookmark-btn">🔖</button>
+          <button className="feedback-btn">💬</button>
+        </div>
+      </div>
 
-      {/* Timer Component (Pass time to handleSubmit) */}
-      <Timer isRunning={isAttempting} onStop={handleSubmit} />
-
-      {/* Show selection buttons for Multiple Correct & Single Correct */}
-      {(question.type === "Multiple Correct" || question.type === "Single Correct") && (
-        <div className="options">
-          {["A", "B", "C", "D"].map((option) => (
-            <button
-              key={option}
-              className={`option-btn ${selectedOptions.includes(option) ? "selected" : ""}`}
-              onClick={() => handleOptionSelect(option)}
-              disabled={!isAttempting || isSubmitted || isAttempted} // Disable before attempt & after submission
-            >
-              {option}
-            </button>
-          ))}
+      {/* Question Image */}
+      {question.imageUrl && (
+        <div className="question-image">
+          <img src={question.imageUrl} alt="Question" />
         </div>
       )}
 
-      {/* Show input field for Numerical Type */}
-      {question.type === "Numerical" && (
-        <input
-          type="number"
-          value={numericalAnswer}
-          onChange={(e) => setNumericalAnswer(e.target.value)}
-          disabled={!isAttempting || isSubmitted || isAttempted} // Disable before attempt & after submission
-        />
-      )}
+      {/* Options / Input Field */}
+      <div className="question-options">
+        {(question.type === "Multiple Correct" || question.type === "Single Correct") && (
+          <div className="options-grid">
+            {["A", "B", "C", "D"].map((option) => (
+              <button
+                key={option}
+                className={`option-btn ${selectedOptions.includes(option) ? "selected" : ""}`}
+                onClick={() => handleOptionSelect(option)}
+                disabled={!isAttempting || isSubmitted || isAttempted}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
 
-      {/* Show Attempt Button (disabled if already attempted) */}
-      {!isAttempting && !isSubmitted && !isAttempted && (
-        <button onClick={handleAttempt} disabled={isAttempted}>
-          Attempt
-        </button>
-      )}
+        {/* Numerical Input */}
+        {question.type === "Numerical" && (
+          <input
+            type="number"
+            className="numerical-input"
+            placeholder="Enter your answer"
+            value={numericalAnswer}
+            onChange={(e) => setNumericalAnswer(e.target.value)}
+            disabled={!isAttempting || isSubmitted || isAttempted}
+          />
+        )}
+      </div>
 
-      {/* Show Submit Button (enabled only during attempt) */}
-      {isAttempting && !isSubmitted && (
-        <button onClick={() => setIsAttempting(false)}>Submit</button>
-      )}
-
-      {/* Show "Attempted" message if already attempted */}
-      {isAttempted && <p>Attempted</p>}
+      {/* Attempt/Submit Button & Timer */}
+      <div className="question-footer">
+        {!isAttempting && !isSubmitted && !isAttempted && (
+          <button className="attempt-btn" onClick={handleAttempt} disabled={isAttempted}>
+            Attempt
+          </button>
+        )}
+        {isAttempting && !isSubmitted && (
+          <button className="submit-btn" onClick={() => setIsAttempting(false)}>
+            Submit
+          </button>
+        )}
+        <Timer isRunning={isAttempting} onStop={handleSubmit} />
+      </div>
     </div>
   );
 };

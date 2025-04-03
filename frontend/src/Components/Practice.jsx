@@ -3,6 +3,7 @@ import { useFetchQuestions } from "../hooks/useFetchQuestions";
 import { useQuestionContext } from "../hooks/useQuestionContext";
 import chapters from "./chapters";
 import Question from "./Question"; 
+import "./Practice.css"; 
 
 const Practice = () => {
   const { fetchQuestions } = useFetchQuestions();
@@ -26,9 +27,9 @@ const Practice = () => {
   };
 
   return (
-    <div>
+    <div className="practice-container">
       <h1>Practice</h1>
-      <div>
+      <div className="filter-container">
         <h2>Filter Questions</h2>
         <input
           type="text"
