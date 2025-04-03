@@ -9,7 +9,6 @@ import "./App.css";
 
 import { useAuthContext } from "./hooks/useAuthContext";
 import Layout from "./Components/Layout";
-import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Signup from "./Components/Signup";
 import Practice from "./Components/Practice";
@@ -19,7 +18,6 @@ import Dashboard from "./Components/Dashboard";
 import Logout from "./Components/Logout";
 import AddQuestion from "./Components/AddQuestion";
 import LandingPage from "./Components/LandingPage";
-import Question from "./Components/Question";
 import AttemptHistory from "./Components/AttemptHistory";
 
 function App() {

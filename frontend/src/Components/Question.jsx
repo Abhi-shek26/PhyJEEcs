@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Question.css";
 import { useFetchAttempts } from "../hooks/useFetchAttempts";
 import { useAuthContext } from "../hooks/useAuthContext";
-import Timer from "./Timer"; // Import Timer Component
+import Timer from "./Timer"; 
 
 const Question = ({ question }) => {
   const { user } = useAuthContext();
@@ -19,7 +19,7 @@ const Question = ({ question }) => {
   // Handle option selection
   const handleOptionSelect = (option) => {
     if (question.type === "Single Correct") {
-      setSelectedOptions([option]); // Only one selection allowed
+      setSelectedOptions([option]); 
     } else if (question.type === "Multiple Correct") {
       setSelectedOptions((prev) =>
         prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
@@ -27,13 +27,11 @@ const Question = ({ question }) => {
     }
   };
 
-  // Handle attempt button click
   const handleAttempt = () => {
     setIsAttempting(true);
     setIsSubmitted(false);
   };
 
-  // Handle submit button click
   const handleSubmit = async (finalTimeTaken) => {
     setIsAttempting(false);
     setIsSubmitted(true);
@@ -76,9 +74,8 @@ const Question = ({ question }) => {
 
   return (
     <div className="question-container">
-      {/* Header Row: Question ID, Chips, Bookmark, Feedback */}
       <div className="question-header">
-        <span className="question-id">QID: {question._id}</span>
+        <span className="question-id">{question.title}</span>
         <div className="question-tags">
           <span className="chip">{question.type}</span>
           <span className="chip">{question.chapter}</span>
@@ -90,14 +87,12 @@ const Question = ({ question }) => {
         </div>
       </div>
 
-      {/* Question Image */}
       {question.imageUrl && (
         <div className="question-image">
           <img src={question.imageUrl} alt="Question" />
         </div>
       )}
 
-      {/* Options / Input Field */}
       <div className="question-options">
         {(question.type === "Multiple Correct" || question.type === "Single Correct") && (
           <div className="options-grid">
@@ -114,7 +109,6 @@ const Question = ({ question }) => {
           </div>
         )}
 
-        {/* Numerical Input */}
         {question.type === "Numerical" && (
           <input
             type="number"
@@ -127,7 +121,6 @@ const Question = ({ question }) => {
         )}
       </div>
 
-      {/* Attempt/Submit Button & Timer */}
       <div className="question-footer">
         {!isAttempting && !isSubmitted && !isAttempted && (
           <button className="attempt-btn" onClick={handleAttempt} disabled={isAttempted}>

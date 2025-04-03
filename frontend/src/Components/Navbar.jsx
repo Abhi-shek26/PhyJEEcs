@@ -25,6 +25,7 @@ const Navbar = () => {
         {user ? (
           <>
             <NavLink to="/practice">Practice</NavLink>
+            <NavLink to="/history">History</NavLink>
 
             {/* Profile Dropdown */}
             <div
