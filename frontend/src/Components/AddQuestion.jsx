@@ -50,8 +50,8 @@ const AddQuestion = () => {
       alert("Question added successfully!");
       setForm({
         title: "",
-        category: "JEE Mains",
-        type: "Single Correct",
+        category: "",
+        type: "",
         chapter: "",
         correctAnswer: "",
         image: null,
@@ -80,8 +80,8 @@ const AddQuestion = () => {
             <option value="" disabled>
               Select Category
             </option>
-            <option value="JEE Mains">JEE Mains</option>
-            <option value="JEE Advanced">JEE Advanced</option>
+            <option value="JM">JM</option>
+            <option value="JA">JA</option>
           </select>
         </div>
 
@@ -90,8 +90,8 @@ const AddQuestion = () => {
             <option value="" disabled>
               Select Type
             </option>
-            <option value="Single Correct">Single Correct</option>
-            <option value="Multiple Correct">Multiple Correct</option>
+            <option value="SCQ">SCQ</option>
+            <option value="MCQ">MCQ</option>
             <option value="Numerical">Numerical</option>
           </select>
         </div>
