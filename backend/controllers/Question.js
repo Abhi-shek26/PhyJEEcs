@@ -29,9 +29,9 @@ exports.uploadQuestion = async (req, res) => {
               .status(400)
               .json({ error: "Numerical answer must be a valid number" });
           }
-        } else if (type === "Single Correct") {
+        } else if (type === "SCQ") {
           formattedCorrectAnswer = correctAnswer.trim().toUpperCase();
-        } else if (type === "Multiple Correct") {
+        } else if (type === "MCQ") {
           formattedCorrectAnswer = correctAnswer
             .split(",")
             .map((opt) => opt.trim().toUpperCase())
@@ -116,11 +116,11 @@ exports.attemptQuestion = async (req, res) => {
 
     let isCorrect = false;
 
-    if (question.type === "Single Correct") {
+    if (question.type === "SCQ") {
       isCorrect =
         question.correctAnswer.trim().toUpperCase() ===
         userAnswer.trim().toUpperCase();
-    } else if (question.type === "Multiple Correct") {
+    } else if (question.type === "MCQ") {
       if (!Array.isArray(userAnswer)) {
         return res
           .status(400)

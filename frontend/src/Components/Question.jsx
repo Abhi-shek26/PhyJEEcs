@@ -1,28 +1,32 @@
 import React, { useState } from "react";
 import "./Question.css";
-import { useFetchAttempts } from "../hooks/useFetchAttempts";
+// import { useFetchAttempts } from "../hooks/useFetchAttempts";
 import { useAuthContext } from "../hooks/useAuthContext";
-import Timer from "./Timer"; 
+import { BiBookmarkPlus } from "react-icons/bi";
+import { MdOutlineFeedback } from "react-icons/md";
+import Timer from "./Timer";
 
-const Question = ({ question }) => {
+const Question = ({ question , attempts}) => {
   const { user } = useAuthContext();
-  const { attempts } = useFetchAttempts();
 
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [numericalAnswer, setNumericalAnswer] = useState("");
   const [isAttempting, setIsAttempting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Check if this question has already been attempted
-  const isAttempted = attempts.some((q) => q.questionId._id === question._id);
+  const currentAttempt = attempts.find((q) => q.questionId._id === question._id);
+  const isAttempted = !!currentAttempt;
 
-  // Handle option selection
   const handleOptionSelect = (option) => {
-    if (question.type === "Single Correct") {
-      setSelectedOptions([option]); 
-    } else if (question.type === "Multiple Correct") {
+    if (question.type === "SCQ") {
+      setSelectedOptions([option]);
+    } else if (question.type === "MCQ") {
       setSelectedOptions((prev) =>
-        prev.includes(option) ? prev.filter((item) => item !== option) : [...prev, option]
+        prev.includes(option)
+          ? prev.filter((item) => item !== option)
+          : [...prev, option]
       );
     }
   };
@@ -39,10 +43,13 @@ const Question = ({ question }) => {
     let userAnswer;
     if (question.type === "Numerical") {
       userAnswer = numericalAnswer !== "" ? parseFloat(numericalAnswer) : null;
-    } else if (question.type === "Single Correct") {
+    } else if (question.type === "SCQ") {
       userAnswer = selectedOptions.length > 0 ? selectedOptions[0] : "";
-    } else if (question.type === "Multiple Correct") {
-      userAnswer = selectedOptions.length > 0 ? selectedOptions.map((opt) => opt.trim().toUpperCase()) : [];
+    } else if (question.type === "MCQ") {
+      userAnswer =
+        selectedOptions.length > 0
+          ? selectedOptions.map((opt) => opt.trim().toUpperCase())
+          : [];
     }
 
     console.log("Submitting attempt with:", { userAnswer, finalTimeTaken });
@@ -82,26 +89,45 @@ const Question = ({ question }) => {
           <span className="chip">{question.category}</span>
         </div>
         <div className="question-actions">
-          <button className="bookmark-btn">🔖</button>
-          <button className="feedback-btn">💬</button>
+          <button className="bookmark-btn">
+            <BiBookmarkPlus />
+          </button>
+          <button className="feedback-btn">
+            <MdOutlineFeedback />
+          </button>
         </div>
       </div>
 
       {question.imageUrl && (
         <div className="question-image">
-          <img src={question.imageUrl} alt="Question" />
+          <img
+            src={question.imageUrl}
+            alt="Question"
+            onClick={() => setIsModalOpen(true)}
+          />
+        </div>
+      )}
+      {isModalOpen && (
+        <div className="image-modal" onClick={() => setIsModalOpen(false)}>
+          <img
+            src={question.imageUrl}
+            alt="Enlarged Image"
+            className="modal-image"
+          />
         </div>
       )}
 
       <div className="question-options">
-        {(question.type === "Multiple Correct" || question.type === "Single Correct") && (
+        {!isAttempted && (question.type === "MCQ" || question.type === "SCQ") && (
           <div className="options-grid">
             {["A", "B", "C", "D"].map((option) => (
               <button
                 key={option}
-                className={`option-btn ${selectedOptions.includes(option) ? "selected" : ""}`}
+                className={`option-btn ${
+                  selectedOptions.includes(option) ? "selected" : ""
+                }`}
                 onClick={() => handleOptionSelect(option)}
-                disabled={!isAttempting || isSubmitted || isAttempted}
+                disabled={!isAttempting || isSubmitted}
               >
                 {option}
               </button>
@@ -109,21 +135,33 @@ const Question = ({ question }) => {
           </div>
         )}
 
-        {question.type === "Numerical" && (
+        {!isAttempted && question.type === "Numerical" && (
           <input
             type="number"
             className="numerical-input"
             placeholder="Enter your answer"
             value={numericalAnswer}
             onChange={(e) => setNumericalAnswer(e.target.value)}
-            disabled={!isAttempting || isSubmitted || isAttempted}
+            disabled={!isAttempting || isSubmitted}
           />
+        )}
+
+        {isAttempted && (
+          <div className="attempt-summary">
+            <p><strong>Your Answer:</strong> {Array.isArray(currentAttempt.userAnswer) ? currentAttempt.userAnswer.join(", ") : currentAttempt.userAnswer}</p>
+            <p><strong>Correct Answer:</strong> {Array.isArray(question.correctAnswer) ? question.correctAnswer.join(", ") : question.correctAnswer}</p>
+            <p><strong>Time Taken:</strong> {currentAttempt.timeTaken} sec </p>
+            <p><strong>Result:</strong> {currentAttempt.isCorrect ? "Correct ✅" : "Incorrect ❌"}</p>
+          </div>
         )}
       </div>
 
       <div className="question-footer">
         {!isAttempting && !isSubmitted && !isAttempted && (
-          <button className="attempt-btn" onClick={handleAttempt} disabled={isAttempted}>
+          <button
+            className="attempt-btn"
+            onClick={handleAttempt}
+          >
             Attempt
           </button>
         )}
@@ -132,10 +170,11 @@ const Question = ({ question }) => {
             Submit
           </button>
         )}
-        <Timer isRunning={isAttempting} onStop={handleSubmit} />
+        {!isAttempted && <Timer isRunning={isAttempting} onStop={handleSubmit} />}
       </div>
     </div>
   );
 };
+
 
 export default Question;

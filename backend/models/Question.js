@@ -5,12 +5,12 @@ const questionSchema = new mongoose.Schema({
   imageUrl: { type: String, required: true },
   category: {
     type: String,
-    enum: ["JEE Mains", "JEE Advanced"],
+    enum: ["JM", "JA"],
     required: true,
   },
   type: {
     type: String,
-    enum: ["Single Correct", "Numerical", "Multiple Correct"],
+    enum: ["SCQ", "Numerical", "MCQ"],
     required: true,
   },
   chapter: { type: String, required: true },

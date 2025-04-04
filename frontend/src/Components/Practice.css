@@ -3,12 +3,13 @@
   flex-wrap: wrap;
   gap: 12px;
   background: #ffffff;
-  padding: 16px;
+  padding: 0 16px 0px 16px;
   border-radius: 14px;
   align-items: center;
   justify-content: space-between;
   width: 80vw;
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
+  /* background-color: aqua; */
 }
 
 .filter-input,
@@ -60,3 +61,17 @@
   padding: 20px;
   /* background-color: #f8f9fa; */
 }
+
+.prev-btn, .next-btn{
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* .prev-btn, .next-btn :hover{
+  background: #5271FF;
+  color: white;
+} */
