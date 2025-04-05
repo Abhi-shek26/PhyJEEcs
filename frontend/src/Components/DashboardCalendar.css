@@ -1,0 +1,110 @@
+.calendar-wrapper {
+    width: 90vw;
+    max-width: 100%;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+    text-align: left;
+  }
+  
+  /* React calendar base */
+  .react-calendar {
+    width: 100%;
+    border: none;
+    font-family: inherit;
+  }
+  
+  /* Selected date label */
+  .calendar-selected-date {
+    margin-top: 1rem;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1rem;
+  }
+  
+  /* Tile override */
+  .react-calendar__tile {
+    position: relative;
+    overflow: visible !important;
+    padding: 0.75rem 0.25rem;
+    text-align: center;
+  }
+  
+  /* Dot & tooltip wrapper */
+  .tooltip-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
+  }
+  
+  /* Small status dot */
+  .indicator-dot {
+    background-color: #5271ff;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 4px;
+  }
+  
+  /* Tooltip box */
+  .tooltip {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    color: black;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none;
+    max-width: 80vw;
+  }
+  
+  /* Show tooltip on hover */
+  .tooltip-wrapper:hover .tooltip {
+    display: block;
+    opacity: 1;
+  }
+  
+  /* Responsive: Tooltip scaling on small screens */
+  @media (max-width: 600px) {
+    .tooltip {
+      font-size: 0.65rem;
+      padding: 5px 8px;
+    }
+  
+    .calendar-wrapper {
+      padding: 0.5rem;
+    }
+  
+    .calendar-selected-date {
+      font-size: 0.9rem;
+    }
+  
+    .indicator-dot {
+      width: 6px;
+      height: 6px;
+    }
+  }
+  
+/* This class forces tooltip to show (for selected date) */
+.tooltip.show-tooltip {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+
+  
