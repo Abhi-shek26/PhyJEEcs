@@ -48,15 +48,21 @@ const ChapterwiseAttempt = () => {
     <div className="chapterwise-container">
       <h2 className="chapterwise-title">Chapter-wise Progress</h2>
       <div className="chapter-grid">
-        {chapterStats.map(({ chapter, JM, JA }) => (
-          <div key={chapter} className="chapter-card">
-            <div className="chapter-name">{chapter}</div>
-            <div className="chapter-counts">
-              <p><strong>JM:</strong> Total: {JM.total}, Attempted: {JM.attempted}</p>
-              <p><strong>JA:</strong> Total: {JA.total}, Attempted: {JA.attempted}</p>
-            </div>
+      {chapterStats.map(({ chapter, JM, JA }, index) => (
+        <div key={index} className="chapter-card">
+          <div className="chapter-name"> {chapter}</div>
+          <div className="attempt-section">
+          <div className="attempt-row">
+            <span className="exam-label">JEE Mains</span>
+            <div className="attempt-box">{JM.attempted}/{JM.total}</div>
           </div>
-        ))}
+          <div className="attempt-row">
+            <span className="exam-label">JEE Adv.</span>
+            <div className="attempt-box">{JA.attempted}/{JA.total}</div>
+          </div>
+        </div>
+        </div>
+      ))}
       </div>
     </div>
   );
