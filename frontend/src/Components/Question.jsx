@@ -13,9 +13,9 @@ const Question = ({ question, attempts = [] }) => {
   const [isAttempting, setIsAttempting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false); // Handles misbehavior on navigation
 
-  // Reset local state when question changes
+  // Reset local states when new question loads
   useEffect(() => {
     setSelectedOptions([]);
     setNumericalAnswer("");
@@ -24,7 +24,7 @@ const Question = ({ question, attempts = [] }) => {
     setHasSubmitted(false);
   }, [question._id]);
 
-  const currentAttempt = attempts.find(
+  const currentAttempt = (attempts || []).find(
     (q) => q.questionId._id === question._id
   );
   const isAttempted = !!currentAttempt;
@@ -48,8 +48,7 @@ const Question = ({ question, attempts = [] }) => {
   };
 
   const handleSubmit = async (finalTimeTaken) => {
-    if (hasSubmitted) return;
-
+    if (hasSubmitted) return; // prevent re-submit on navigating back
     setIsAttempting(false);
     setIsSubmitted(true);
     setHasSubmitted(true);
@@ -84,7 +83,6 @@ const Question = ({ question, attempts = [] }) => {
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Failed to attempt");
-
       console.log("Attempt recorded:", data);
     } catch (error) {
       console.error("Error submitting attempt:", error);
@@ -184,18 +182,18 @@ const Question = ({ question, attempts = [] }) => {
       </div>
 
       <div className="question-footer">
-        {!isAttempted && !isAttempting && !isSubmitted && (
+        {!isAttempting && !isSubmitted && !isAttempted && (
           <button className="attempt-btn" onClick={handleAttempt}>
             Attempt
           </button>
         )}
-        {!isAttempted && isAttempting && !isSubmitted && (
-          <>
-            <button className="submit-btn" onClick={() => setIsAttempting(false)}>
-              Submit
-            </button>
-            <Timer isRunning={isAttempting} onStop={handleSubmit} />
-          </>
+        {isAttempting && !isSubmitted && !isAttempted && (
+          <button className="submit-btn" onClick={() => setIsAttempting(false)}>
+            Submit
+          </button>
+        )}
+        {!isAttempted && !isSubmitted && (
+          <Timer isRunning={isAttempting} onStop={handleSubmit} />
         )}
       </div>
     </div>

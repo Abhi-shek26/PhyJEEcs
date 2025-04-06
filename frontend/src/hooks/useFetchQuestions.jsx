@@ -7,7 +7,7 @@ export const useFetchQuestions = () => {
     const isFilterFilled = Object.values(filters).some((val) => val.trim() !== "");
 
     if (!isFilterFilled && !force) {
-      // console.log("No filters and not forced. Skipping fetch.");
+      console.warn("No filters and not forced. Skipping fetch.");
       dispatch({ type: "SET_QUESTIONS", payload: [] });
       return;
     }
@@ -40,7 +40,7 @@ export const useFetchQuestions = () => {
       }
 
       const data = await response.json();
-      console.log(" Questions fetched:", data);
+      console.log("📌 Questions fetched:", data); 
       dispatch({ type: "SET_QUESTIONS", payload: data });
     } catch (error) {
       console.error("Error fetching questions:", error);
