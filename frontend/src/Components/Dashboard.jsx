@@ -13,10 +13,8 @@ const Dashboard = () => {
   return (
     <div>
       <div className="user-details">
-        <p>{user.name}</p>
-        <p>{user.email}</p>
-        <p>{user.year}</p>
-        <button onClick={handleViewHistory}>View Attempt History</button>
+        <p>Hi,{user.name}</p>
+        {/* <button onClick={handleViewHistory}>View Attempt History</button> */}
       </div>
       <ChapterwiseAttempt/>
     </div>
