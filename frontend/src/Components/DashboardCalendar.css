@@ -10,7 +10,6 @@
     text-align: left;
   }
   
-  /* React calendar base */
   .react-calendar {
     width: 100%;
     border: none;
@@ -22,7 +21,6 @@
   }
   
 
-  /* Selected date label */
   .calendar-selected-date {
     margin-top: 1rem;
     text-align: center;
@@ -30,7 +28,6 @@
     font-size: 1rem;
   }
   
-  /* Tile override */
   .react-calendar__tile {
     position: relative;
     overflow: visible !important;
@@ -39,7 +36,6 @@
     border: 1px solid rgb(158, 156, 156) !important;
   }
   
-  /* Dot & tooltip wrapper */
   .tooltip-wrapper {
     position: relative;
     display: flex;
@@ -48,16 +44,14 @@
     cursor: default;
   }
   
-  /* Small status dot */
   .indicator-dot {
-    background-color: #5271ff;
+    background-color:green;
     width: 8px;
     height: 8px;
     border-radius: 50%;
     margin-top: 4px;
   }
   
-  /* Tooltip box */
   .tooltip {
     position: absolute;
     bottom: 110%;
@@ -79,13 +73,11 @@
     max-width: 80vw;
   }
   
-  /* Show tooltip on hover */
   .tooltip-wrapper:hover .tooltip {
     display: block;
     opacity: 1;
   }
   
-  /* Responsive: Tooltip scaling on small screens */
   @media (max-width: 600px) {
     .tooltip {
       font-size: 0.65rem;
@@ -106,7 +98,6 @@
     }
   }
   
-/* This class forces tooltip to show (for selected date) */
 .tooltip.show-tooltip {
   display: block !important;
   opacity: 1 !important;

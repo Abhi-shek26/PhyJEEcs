@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Question.css";
-// import { useFetchAttempts } from "../hooks/useFetchAttempts";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { BiBookmarkPlus } from "react-icons/bi";
 import { MdOutlineFeedback } from "react-icons/md";
 import Timer from "./Timer";
 
-const Question = ({ question , attempts}) => {
+const Question = ({ question, attempts = [] }) => {
   const { user } = useAuthContext();
 
   const [selectedOptions, setSelectedOptions] = useState([]);
@@ -14,9 +13,20 @@ const Question = ({ question , attempts}) => {
   const [isAttempting, setIsAttempting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
-  // Check if this question has already been attempted
-  const currentAttempt = attempts.find((q) => q.questionId._id === question._id);
+  // Reset local state when question changes
+  useEffect(() => {
+    setSelectedOptions([]);
+    setNumericalAnswer("");
+    setIsAttempting(false);
+    setIsSubmitted(false);
+    setHasSubmitted(false);
+  }, [question._id]);
+
+  const currentAttempt = attempts.find(
+    (q) => q.questionId._id === question._id
+  );
   const isAttempted = !!currentAttempt;
 
   const handleOptionSelect = (option) => {
@@ -34,11 +44,15 @@ const Question = ({ question , attempts}) => {
   const handleAttempt = () => {
     setIsAttempting(true);
     setIsSubmitted(false);
+    setHasSubmitted(false);
   };
 
   const handleSubmit = async (finalTimeTaken) => {
+    if (hasSubmitted) return;
+
     setIsAttempting(false);
     setIsSubmitted(true);
+    setHasSubmitted(true);
 
     let userAnswer;
     if (question.type === "Numerical") {
@@ -51,8 +65,6 @@ const Question = ({ question , attempts}) => {
           ? selectedOptions.map((opt) => opt.trim().toUpperCase())
           : [];
     }
-
-    console.log("Submitting attempt with:", { userAnswer, finalTimeTaken });
 
     const attemptData = {
       questionId: question._id,
@@ -111,7 +123,7 @@ const Question = ({ question , attempts}) => {
         <div className="image-modal" onClick={() => setIsModalOpen(false)}>
           <img
             src={question.imageUrl}
-            alt="Enlarged Image"
+            alt="Enlarged"
             className="modal-image"
           />
         </div>
@@ -148,33 +160,46 @@ const Question = ({ question , attempts}) => {
 
         {isAttempted && (
           <div className="attempt-summary">
-            <p><strong>Your Answer:</strong> {Array.isArray(currentAttempt.userAnswer) ? currentAttempt.userAnswer.join(", ") : currentAttempt.userAnswer}</p>
-            <p><strong>Correct Answer:</strong> {Array.isArray(question.correctAnswer) ? question.correctAnswer.join(", ") : question.correctAnswer}</p>
-            <p><strong>Time Taken:</strong> {currentAttempt.timeTaken} sec </p>
-            <p><strong>Result:</strong> {currentAttempt.isCorrect ? "Correct ✅" : "Incorrect ❌"}</p>
+            <p>
+              <strong>Your Answer:</strong>{" "}
+              {Array.isArray(currentAttempt.userAnswer)
+                ? currentAttempt.userAnswer.join(", ")
+                : currentAttempt.userAnswer}
+            </p>
+            <p>
+              <strong>Correct Answer:</strong>{" "}
+              {Array.isArray(question.correctAnswer)
+                ? question.correctAnswer.join(", ")
+                : question.correctAnswer}
+            </p>
+            <p>
+              <strong>Time Taken:</strong> {currentAttempt.timeTaken} sec
+            </p>
+            <p>
+              <strong>Result:</strong>{" "}
+              {currentAttempt.isCorrect ? "Correct ✅" : "Incorrect ❌"}
+            </p>
           </div>
         )}
       </div>
 
       <div className="question-footer">
-        {!isAttempting && !isSubmitted && !isAttempted && (
-          <button
-            className="attempt-btn"
-            onClick={handleAttempt}
-          >
+        {!isAttempted && !isAttempting && !isSubmitted && (
+          <button className="attempt-btn" onClick={handleAttempt}>
             Attempt
           </button>
         )}
-        {isAttempting && !isSubmitted && (
-          <button className="submit-btn" onClick={() => setIsAttempting(false)}>
-            Submit
-          </button>
+        {!isAttempted && isAttempting && !isSubmitted && (
+          <>
+            <button className="submit-btn" onClick={() => setIsAttempting(false)}>
+              Submit
+            </button>
+            <Timer isRunning={isAttempting} onStop={handleSubmit} />
+          </>
         )}
-        {!isAttempted && <Timer isRunning={isAttempting} onStop={handleSubmit} />}
       </div>
     </div>
   );
 };
-
 
 export default Question;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFetchQuestions } from "../hooks/useFetchQuestions";
 import { useQuestionContext } from "../hooks/useQuestionContext";
 import { useFetchAttempts } from "../hooks/useFetchAttempts";
@@ -10,9 +10,8 @@ import "./Practice.css";
 
 const Practice = () => {
   const { fetchQuestions } = useFetchQuestions();
-  const { questions, dispatch } = useQuestionContext();
+  const { questions } = useQuestionContext();
   const { attempts } = useFetchAttempts();
-
   const [filters, setFilters] = useState({
     title: "",
     category: "",
@@ -25,11 +24,6 @@ const Practice = () => {
   const isFilterFilled = Object.values(filters).some(
     (val) => val.trim() !== ""
   );
-
-  // Reset questions on component mount
-  useEffect(() => {
-    dispatch({ type: "SET_QUESTIONS", payload: [] });
-  }, [dispatch]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -119,15 +113,11 @@ const Practice = () => {
               className="question-count"
               style={{ textAlign: "center", marginTop: "0.5rem" }}
             >
-              {currentIndex + 1} of {questions.length}
+               {currentIndex +1} of {questions.length}
             </div>
             <div
               className="navigation-buttons"
-              style={{
-                marginTop: "1rem",
-                textAlign: "center",
-                marginBottom: "1rem",
-              }}
+              style={{ marginTop: "1rem", textAlign: "center", marginBottom: "1rem" }}
             >
               <button
                 onClick={handlePrevious}
