@@ -1,7 +1,7 @@
 .calendar-wrapper {
     width: 90vw;
     max-width: 100%;
-    margin: 2rem auto;
+    margin: 1rem auto;
     padding: 1rem;
     background-color: #ffffff;
     border-radius: 16px;
@@ -16,7 +16,12 @@
     border: none;
     font-family: inherit;
   }
+
+  .react-calendar__navigation__arrow{
+    font-size: 2rem !important;
+  }
   
+
   /* Selected date label */
   .calendar-selected-date {
     margin-top: 1rem;
@@ -31,6 +36,7 @@
     overflow: visible !important;
     padding: 0.75rem 0.25rem;
     text-align: center;
+    border: 1px solid rgb(158, 156, 156) !important;
   }
   
   /* Dot & tooltip wrapper */

@@ -35,7 +35,7 @@ const DashboardCalendar = () => {
 
   return (
     <div className="calendar-wrapper">
-      <h3> Calendar</h3>
+      <h4> Calendar</h4>
       <Calendar
         onChange={onChange}
         value={selectedDate}
@@ -57,9 +57,6 @@ const DashboardCalendar = () => {
         }}
         
       />
-      <p className="calendar-selected-date">
-        Selected Date: {selectedDate.toDateString()}
-      </p>
     </div>
   );
 };
