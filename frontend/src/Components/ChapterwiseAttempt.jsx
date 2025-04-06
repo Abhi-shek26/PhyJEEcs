@@ -14,7 +14,7 @@ const ChapterwiseAttempt = () => {
   useEffect(() => {
     const loadQuestions = async () => {
       setLoadingQuestions(true);
-      await fetchQuestions({});
+      await fetchQuestions({}, true);
       setLoadingQuestions(false);
     };
     loadQuestions();
@@ -46,7 +46,7 @@ const ChapterwiseAttempt = () => {
 
   return (
     <div className="chapterwise-container">
-      <h2 className="chapterwise-title">Chapter-wise Progress</h2>
+      <p className="chapterwise-title">Chapter-wise Progress</p>
       <div className="chapter-grid">
       {chapterStats.map(({ chapter, JM, JA }, index) => (
         <div key={index} className="chapter-card">

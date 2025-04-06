@@ -3,10 +3,18 @@ import { useQuestionContext } from "./useQuestionContext";
 export const useFetchQuestions = () => {
   const { dispatch } = useQuestionContext();
 
-  const fetchQuestions = async (filters = {}) => {
+  const fetchQuestions = async (filters = {}, force = false) => {
+    const isFilterFilled = Object.values(filters).some((val) => val.trim() !== "");
+
+    if (!isFilterFilled && !force) {
+      console.warn("No filters and not forced. Skipping fetch.");
+      dispatch({ type: "SET_QUESTIONS", payload: [] });
+      return;
+    }
+
     try {
       const queryParams = new URLSearchParams(filters).toString();
-      console.log("Fetching questions with filters:", queryParams); // Debugging output
+      console.log("Fetching questions with filters:", queryParams); 
 
       const token = localStorage.getItem("user")
         ? JSON.parse(localStorage.getItem("user")).token
@@ -32,8 +40,7 @@ export const useFetchQuestions = () => {
       }
 
       const data = await response.json();
-      console.log("📌 API Response:", data);
-
+      console.log("📌 Questions fetched:", data); 
       dispatch({ type: "SET_QUESTIONS", payload: data });
     } catch (error) {
       console.error("Error fetching questions:", error);
