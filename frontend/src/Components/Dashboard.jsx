@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import ChapterwiseAttempt from "./ChapterwiseAttempt";
+import DashboardCalendar from "./DashboardCalendar";
+import StreakCounter from "./StreakCounter";
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -11,12 +14,14 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <div className="user-details">
-        <p>Hi,{user.name}</p>
-        {/* <button onClick={handleViewHistory}>View Attempt History</button> */}
+    <div className="dashboard-container">
+      <div className="dashboard-header">
+          <h2 className="user-name"> Hii, {user.name}</h2>
       </div>
-      <ChapterwiseAttempt/>
+ 
+          <StreakCounter />
+          <DashboardCalendar />
+          <ChapterwiseAttempt />
     </div>
   );
 };
