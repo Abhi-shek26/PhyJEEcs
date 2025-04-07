@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useLogout } from '../hooks/useLogout';
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import "./Navbar.css";
 
 const Navbar = () => {
   const { logout } = useLogout();
-  
   const { user } = useAuthContext();
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const profileRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    setProfileOpen(false);
+  }, [location.pathname]);
 
   return (
     <nav className="navbar">
@@ -20,16 +35,15 @@ const Navbar = () => {
         </NavLink>
       </div>
 
-      {/* Navigation Links */}
       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
         {user ? (
           <>
             <NavLink to="/practice">Practice</NavLink>
             <NavLink to="/history">History</NavLink>
 
-            {/* Profile Dropdown */}
             <div
               className="profile-container"
+              ref={profileRef} 
               onClick={() => setProfileOpen(!profileOpen)}
             >
               <div className="profile-icon">
@@ -38,11 +52,13 @@ const Navbar = () => {
               {profileOpen && (
                 <div
                   className="profile-dropdown"
-                  onClick={(e) => e.stopPropagation()} // Prevents closing when clicking inside
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <NavLink to="/profile">Profile</NavLink>
                   <NavLink to="/bookmarks">Bookmarks</NavLink>
-                  <NavLink onClick={logout}>Logout</NavLink>
+                  <button className="logout-button" onClick={logout}>
+                    Logout
+                  </button>
                 </div>
               )}
             </div>
@@ -55,7 +71,6 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Hamburger Menu */}
       <button
         className="hamburger"
         onClick={() => setMenuOpen(!menuOpen)}

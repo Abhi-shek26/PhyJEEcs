@@ -140,6 +140,34 @@ h2 {
   background-color: #dc3545;
 }
 
+.info-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e1e1e1;
+  font-size: 14px;
+}
+
+.info-box label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+  font-size: 13px;
+}
+
+.info-box span {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  border-radius: 4px;
+  min-width: 40px;
+  text-align: center;
+  margin-left: 10px;
+}
+
 .question-title {
   background-color: #5271ff;
   padding: 8px;
