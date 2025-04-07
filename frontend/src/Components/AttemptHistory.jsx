@@ -89,12 +89,13 @@ const AttemptHistory = () => {
           )}
 
           <div className="info-grid">
-            <div>
-              <strong>Your Answer: </strong> {currentAttempt.userAnswer}
+            <div className="info-box">
+              <label>Your Answer</label>
+              <span>{currentAttempt.userAnswer}</span>
             </div>
-            <div>
-              <strong>Correct Answer: </strong>{" "}
-              {currentAttempt.questionId.correctAnswer}
+            <div className="info-box">
+              <label>Correct Answer</label>
+              <span>{currentAttempt.questionId.correctAnswer}</span>
             </div>
             <div
               className={`${
@@ -103,8 +104,9 @@ const AttemptHistory = () => {
             >
               {currentAttempt.isCorrect ? "Correct" : "Incorrect"}
             </div>
-            <div>
-              <strong>Time Taken: </strong> {currentAttempt.timeTaken} sec
+            <div className="info-box">
+              <label>Time Taken</label>
+              <span>{currentAttempt.timeTaken} sec</span>
             </div>
             &nbsp;
             <p className="attempted-on">
