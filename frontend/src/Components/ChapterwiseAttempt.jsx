@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useFetchQuestions } from "../hooks/useFetchQuestions";
 import { useQuestionContext } from "../hooks/useQuestionContext";
 import { useFetchAttempts } from "../hooks/useFetchAttempts";
-import chapters from "./chapters";
+import chapters from "./Chapters";
 import "./ChapterwiseAttempt.css";
 
 const ChapterwiseAttempt = () => {

@@ -4,7 +4,7 @@ import { useQuestionContext } from "../hooks/useQuestionContext";
 import { useFetchAttempts } from "../hooks/useFetchAttempts";
 import { GrLinkNext } from "react-icons/gr";
 import { GrLinkPrevious } from "react-icons/gr";
-import chapters from "./chapters";
+import chapters from "./Chapters";
 import Question from "./Question";
 import "./Practice.css";
 

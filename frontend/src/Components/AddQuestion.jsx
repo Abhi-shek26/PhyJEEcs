@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAddQuestion } from "../hooks/useAddQuestion";
-import chapters from "./chapters";
+import chapters from "./Chapters";
 import "./AddQuestion.css";
 
 const AddQuestion = () => {
