@@ -12,7 +12,7 @@ export const useFetchAttempts = () => {
     const fetchAttempts = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`https://phyjeecs.onrender.com/api/attempts`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/attempts`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         const data = await response.json();

@@ -25,7 +25,7 @@ export const useFetchQuestions = () => {
       }
 
       const response = await fetch(
-        `https://phyjeecs.onrender.com/api/questions?${queryParams}`,
+        `${import.meta.env.VITE_API_URL}/api/questions?${queryParams}`,
         {
           method: "GET",
           headers: {

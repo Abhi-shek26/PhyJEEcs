@@ -72,7 +72,7 @@ const Question = ({ question, attempts = [] }) => {
     };
 
     try {
-      const response = await fetch(`https://phyjeecs.onrender.com/api/attempt`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/attempt`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -18,7 +18,7 @@ export const useAddQuestion = () => {
         return;
       }
 
-      const response = await fetch("https://phyjeecs.onrender.com/api/upload", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/upload`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
