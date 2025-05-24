@@ -25,7 +25,7 @@ export const useFetchQuestions = () => {
       }
 
       const response = await fetch(
-        `http://localhost:4000/api/questions?${queryParams}`,
+        `https://phyjeecs.onrender.com/api/questions?${queryParams}`,
         {
           method: "GET",
           headers: {

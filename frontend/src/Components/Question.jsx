@@ -72,7 +72,7 @@ const Question = ({ question, attempts = [] }) => {
     };
 
     try {
-      const response = await fetch(`http://localhost:4000/api/attempt`, {
+      const response = await fetch(`https://phyjeecs.onrender.com/api/attempt`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

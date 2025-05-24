@@ -17,7 +17,7 @@ export const useSignup = () => {
       }
 
       try {
-          const response = await fetch("http://localhost:4000/api/user/signup", {
+          const response = await fetch("https://phyjeecs.onrender.com/api/user/signup", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ name, email, password, year }),

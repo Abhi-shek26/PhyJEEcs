@@ -12,7 +12,7 @@ export const useFetchAttempts = () => {
     const fetchAttempts = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:4000/api/attempts`, {
+        const response = await fetch(`https://phyjeecs.onrender.com/api/attempts`, {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         const data = await response.json();

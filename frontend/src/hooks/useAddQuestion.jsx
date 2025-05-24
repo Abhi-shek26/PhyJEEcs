@@ -18,7 +18,7 @@ export const useAddQuestion = () => {
         return;
       }
 
-      const response = await fetch("http://localhost:4000/api/upload", {
+      const response = await fetch("https://phyjeecs.onrender.com/api/upload", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
