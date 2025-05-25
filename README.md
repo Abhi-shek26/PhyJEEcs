@@ -38,6 +38,31 @@ PhyJEEcs is a web application designed to help JEE aspirants practice Physics qu
 
 ✅ View Attempt History (Correct/Incorrect, Time Taken, Correct Answer)
 
+## 📸 Screenshots
+
+| Page | Preview |
+| :-- | :-- |
+| **Landing Page** | ![Landing Page](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/LandingPage.png?raw=true) |
+| **MCQ Attempt Page** | ![MCQ Attempt](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/MCQAttempt.png?raw=true) |
+| **Numerical Attempt Page** | ![Numerical Attempt](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/NumericalAttempt.png?raw=true) |
+| **Dashboard** | ![Dashboard](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/dashboard.png?raw=true) |
+| **Profile Page** | ![Profile](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/profile.png?raw=true) |
+| **Filter/Search Page** | ![Filter](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/filter.png?raw=true) |
+| **Attempt History Page** | ![Attempt History](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/AttemptHistory.png?raw=true) |
+| **Already Attempted Page** | ![Already Attempted](https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/AlreadyAttempted.png?raw=true) |
+
+---
+
+## 🚫 Error Pages (in one line)
+
+<p align="center">
+  <img src="https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/loginError.png?raw=true" width="300" />
+  <img src="https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/signupError1.png?raw=true" width="300" />
+  <img src="https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/signupError2.png?raw=true" width="300" />
+  <img src="https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/signupError3.png?raw=true" width="300" />
+</p>
+
+
 ## 🎯Upcoming Features (To-Do)
 📌 Add more high-quality Physics questions to the database
 
