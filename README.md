@@ -53,7 +53,7 @@ PhyJEEcs is a web application designed to help JEE aspirants practice Physics qu
 
 ---
 
-## 🚫 Error Pages (in one line)
+## 🚫 Error Pages
 
 <p align="center">
   <img src="https://github.com/Abhi-shek26/PhyJEEcs/blob/main/screenshots/loginError.png?raw=true" width="300" />
