@@ -3,6 +3,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const userRoutes = require('./routes/User')
 const questionRoutes = require("./routes/Question");
 const attemptRoutes = require("./routes/Attempt");
@@ -14,6 +16,15 @@ const explainRoutes = require("./routes/Explain");
 const app = express();
 
 app.use(express.json());
+app.use(helmet());
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 300,
+    standardHeaders: true,
+    legacyHeaders: false,
+  })
+);
 const corsOptions = {
   origin: (process.env.CORS_ORIGIN || "").split(",").filter(Boolean).length
     ? (process.env.CORS_ORIGIN || "").split(",")
@@ -28,7 +39,13 @@ app.use((req, res, next) => {
 
 app.get("/api/health", (req, res) => res.json({ ok: true, time: new Date().toISOString() }));
 
-app.use("/api/user", userRoutes);
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use("/api/user", authLimiter, userRoutes);
 app.use("/api", questionRoutes);
 app.use("/api/attempts", attemptRoutes);
 app.use("/api/analytics", analyticsRoutes);

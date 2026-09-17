@@ -28,15 +28,38 @@ PhyJEEcs is a web application designed to help JEE aspirants practice Physics qu
 
 ## ⚙️ Current Functionalities
 
-✅ User Authentication (Login/Signup/Logout)
+✅ User Authentication (Login/Signup/Logout, JWT + RBAC)
 
 ✅ Chapter-wise Progress Tracking 
 
-✅ Search Questions by Code, Chapter, Level (JM/JA), and Type
+✅ Search Questions by Code, Chapter, Level (JM/JA), Type + Difficulty
 
-✅ Attempt Questions (MCQ, Numerical, etc.)
+✅ Attempt Questions (SCQ, MCQ, Numerical with grading engine)
 
 ✅ View Attempt History (Correct/Incorrect, Time Taken, Correct Answer)
+
+✅ Insights Dashboard — accuracy KPIs, 14-day trend, chapter/type/difficulty charts, weakest-topics table, CSV export
+
+✅ Product metrics — activation / power-user / active-days funnel, cohort by Class (11/12/Dropper), bookmarks + 1–5 question feedback
+
+✅ AI recommendations — weakest-chapter-first queue + spaced repetition of incorrect attempts + step-by-step solution/explain endpoint
+
+✅ Production hardening — helmet, rate limiting (stricter on auth), paginated APIs, answer hiding, health check
+
+## 🔌 Key APIs
+
+```
+GET  /api/health
+GET  /api/questions?page&limit&difficulty&includeAnswers=
+POST /api/attempt
+GET  /api/attempts?page&limit
+GET  /api/analytics/summary | /funnel | /recommendations | /export.csv
+GET+POST /api/bookmarks        POST /api/feedback
+GET  /api/explain/:id          PATCH /api/questions/:id/solution (admin)
+```
+
+Backend env: `MONGO_URI PORT SECRET CORS_ORIGIN CLOUDINARY_CLOUD_NAME CLOUDINARY_API_KEY CLOUDINARY_API_SECRET`.
+Frontend env: `VITE_API_URL`.
 
 ## 📸 Screenshots
 
