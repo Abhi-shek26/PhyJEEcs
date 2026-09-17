@@ -16,11 +16,9 @@ export const useFetchAttempts = () => {
           headers: { Authorization: `Bearer ${user.token}` },
         });
         const data = await response.json();
-        console.log( "Fetched attempts data:", data);
-        
         if (!response.ok) throw new Error(data.error || "Failed to fetch attempts");
-
-        setAttempts(data);
+        const list = Array.isArray(data) ? data : data.data || [];
+        setAttempts(list);
       } catch (error) {
         console.error(error);
       } finally {

@@ -11,6 +11,8 @@ const AddQuestion = () => {
     type: "",
     chapter: "",
     correctAnswer: "",
+    difficulty: "Medium",
+    solutionText: "",
     image: null,
   });
 
@@ -54,6 +56,8 @@ const AddQuestion = () => {
         type: "",
         chapter: "",
         correctAnswer: "",
+        difficulty: "Medium",
+        solutionText: "",
         image: null,
       });
       setImagePreview(null);
@@ -122,6 +126,24 @@ const AddQuestion = () => {
             value={form.correctAnswer}
             onChange={handleChange}
             required
+          />
+        </div>
+
+        <div className="input-group">
+          <select name="difficulty" value={form.difficulty} onChange={handleChange}>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+
+        <div className="input-group">
+          <input
+            type="text"
+            name="solutionText"
+            placeholder="Solution / explanation (optional)"
+            value={form.solutionText}
+            onChange={handleChange}
           />
         </div>
 

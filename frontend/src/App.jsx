@@ -19,6 +19,7 @@ import Logout from "./Components/Logout";
 import AddQuestion from "./Components/AddQuestion";
 import LandingPage from "./Components/LandingPage";
 import AttemptHistory from "./Components/AttemptHistory";
+import Insights from "./Components/Insights";
 
 function App() {
   const { user, loading } = useAuthContext();
@@ -53,6 +54,7 @@ function App() {
             <>
               <Route path="practice" element={<Practice />} />
               <Route path="/history" element={<AttemptHistory />} />
+              <Route path="insights" element={<Insights />} />
               <Route path="profile" element={<Profile />} />
               <Route path="bookmarks" element={<Bookmarks />} />
               <Route path="dashboard" element={<Dashboard />} />

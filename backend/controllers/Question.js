@@ -2,13 +2,23 @@ const cloudinary = require("../config/cloudinary");
 const Question = require("../models/Question");
 const Attempt = require("../models/Attempt");
 
-// Upload Question
+// Upload Question (admin-only enforced at route level)
 exports.uploadQuestion = async (req, res) => {
   try {
-    const { title, category, type, chapter, correctAnswer } = req.body;
+    const { title, category, type, chapter, correctAnswer, difficulty, solutionText } = req.body;
 
     if (!title || !category || !type || !chapter || !correctAnswer) {
       return res.status(400).json({ error: "All fields are required" });
+    }
+
+    if (difficulty && !["Easy", "Medium", "Hard"].includes(difficulty)) {
+      return res.status(400).json({ error: "Invalid difficulty" });
+    }
+    if (category && !["JM", "JA"].includes(category)) {
+      return res.status(400).json({ error: "Invalid category" });
+    }
+    if (type && !["SCQ", "MCQ", "Numerical"].includes(type)) {
+      return res.status(400).json({ error: "Invalid question type" });
     }
 
     if (!req.file) {
@@ -48,6 +58,8 @@ exports.uploadQuestion = async (req, res) => {
           type,
           chapter,
           correctAnswer: formattedCorrectAnswer,
+          difficulty: difficulty || "Medium",
+          solutionText: solutionText || "",
         });
 
         await newQuestion.save();
@@ -65,23 +77,30 @@ exports.uploadQuestion = async (req, res) => {
   }
 };
 
-// Fetch Questions
+// Fetch Questions (paginated, injection-safe, answers hidden by default)
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 exports.getQuestions = async (req, res) => {
   try {
-    const { title, category, type, chapter } = req.query;
+    const { title, category, type, chapter, difficulty } = req.query;
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.min(parseInt(req.query.limit) || 20, 100);
+    const includeAnswers = req.query.includeAnswers === "1";
 
     const filter = {};
-    if (title) filter.title = { $regex: `^${title}$`, $options: "i" };
+    if (title) filter.title = { $regex: `^${escapeRegex(title)}$`, $options: "i" };
     if (category) filter.category = category;
     if (type) filter.type = type;
     if (chapter) filter.chapter = chapter;
+    if (difficulty) filter.difficulty = difficulty;
 
-    console.log("Filter applied:", filter); // Debugging output
+    const total = await Question.countDocuments(filter);
+    const projection = includeAnswers ? {} : { correctAnswer: 0 };
+    const questions = await Question.find(filter, projection)
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-    const questions = await Question.find(filter).sort({ createdAt: -1 });
-
-    console.log("Questions found:", questions.length); // Debugging output
-    res.status(200).json(questions);
+    res.status(200).json({ data: questions, page, limit, total });
   } catch (err) {
     console.error("Error fetching questions:", err);
     res.status(500).json({ error: err.message });
@@ -102,6 +121,9 @@ exports.attemptQuestion = async (req, res) => {
         .status(400)
         .json({ error: "Question ID and user answer are required" });
     }
+    if (timeTaken !== undefined && (typeof timeTaken !== "number" || timeTaken < 0)) {
+      return res.status(400).json({ error: "timeTaken must be a non-negative number" });
+    }
 
     // Check if the user has already attempted this question
     const existingAttempt = await Attempt.findOne({ userId, questionId });
@@ -117,6 +139,9 @@ exports.attemptQuestion = async (req, res) => {
     let isCorrect = false;
 
     if (question.type === "SCQ") {
+      if (typeof userAnswer !== "string") {
+        return res.status(400).json({ error: "SCQ answer must be a string" });
+      }
       isCorrect =
         question.correctAnswer.trim().toUpperCase() ===
         userAnswer.trim().toUpperCase();
@@ -153,6 +178,12 @@ exports.attemptQuestion = async (req, res) => {
       isCorrect,
     });
   } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ error: "You have already attempted this question" });
+    }
+    if (err.name === "CastError") {
+      return res.status(400).json({ error: "Invalid question ID" });
+    }
     res.status(500).json({ error: err.message });
   }
 };

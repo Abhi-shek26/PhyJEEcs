@@ -485,3 +485,23 @@ Headers-  Authorization: Bearer <token>
 ```
 
 ##### will add more APIs ( if required)
+
+## Analytics / Product / AI APIs (merged-domain layer)
+
+All require `Authorization: Bearer <token>`.
+
+```
+GET /api/analytics/summary          -> KPIs (accuracy, avgTime, streak), byChapter, byType, byDifficulty, 14-day trend, weakestChapters
+GET /api/analytics/funnel           -> me {activated, powerUser, activeDays}; global {users, activationRate, byYear} if isAdmin
+GET /api/analytics/recommendations  -> weakestChapters + recommended (un-attempted in weak chapters) + reviewDue (incorrect >3d) + strategy
+GET /api/analytics/export.csv       -> CSV download for EDA (attemptedAt, code, chapter, category, type, difficulty, isCorrect, timeTaken)
+GET /api/bookmarks / POST /api/bookmarks {questionId}   -> toggle/list bookmarks (product engagement)
+GET /api/feedback[?questionId] / POST /api/feedback {questionId, rating 1-5, text} -> quality/NPS signal
+GET /api/explain/:id                -> stored solutionText or LLM prompt template (no key committed)
+PATCH /api/questions/:id/solution   -> admin stores curated/LLM solution
+GET /api/health                     -> { ok: true }
+```
+
+Pagination: `GET /api/questions?page&limit&includeAnswers=1&difficulty=` and
+`GET /api/attempts?page&limit` return `{ data, page, limit, total }`.
+Upload (`POST /api/upload`) is now admin-only (`isAdmin`), accepts `difficulty` + `solutionText`.

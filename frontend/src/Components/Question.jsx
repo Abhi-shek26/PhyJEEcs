@@ -1,9 +1,24 @@
 import React, { useState, useEffect } from "react";
 import "./Question.css";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { BiBookmarkPlus } from "react-icons/bi";
+import { BiBookmarkPlus, BiBookmark } from "react-icons/bi";
 import { MdOutlineFeedback } from "react-icons/md";
 import Timer from "./Timer";
+
+const API = import.meta.env.VITE_API_URL;
+
+async function readJsonSafe(res) {
+  const text = await res.text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    throw new Error(
+      res.status === 404
+        ? "Feature not on server yet — redeploy backend (this API returns 404 HTML)."
+        : `Server error (${res.status}).`
+    );
+  }
+}
 
 const Question = ({ question, attempts = [] }) => {
   const { user } = useAuthContext();
@@ -14,6 +29,12 @@ const Question = ({ question, attempts = [] }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false); // Handles misbehavior on navigation
+  const [bookmarked, setBookmarked] = useState(false);
+  const [actionMsg, setActionMsg] = useState("");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [rating, setRating] = useState(5);
+  const [feedbackText, setFeedbackText] = useState("");
+  const [solution, setSolution] = useState(null);
 
   // Reset local states when new question loads
   useEffect(() => {
@@ -22,7 +43,79 @@ const Question = ({ question, attempts = [] }) => {
     setIsAttempting(false);
     setIsSubmitted(false);
     setHasSubmitted(false);
+    setSolution(null);
+    setShowFeedback(false);
+    setActionMsg("");
   }, [question._id]);
+
+  // Load persisted bookmark state so icon reflects reality on reload
+  useEffect(() => {
+    if (!user || !question?._id) return;
+    fetch(`${API}/api/bookmarks`, {
+      headers: { Authorization: `Bearer ${user.token}` },
+    })
+      .then(readJsonSafe)
+      .then((d) => {
+        const list = Array.isArray(d) ? d : [];
+        setBookmarked(list.some((b) => (b.questionId?._id || b.questionId) === question._id));
+      })
+      .catch(() => {});
+  }, [user, question._id]);
+
+  const toggleBookmark = async () => {
+    setActionMsg("");
+    try {
+      const res = await fetch(`${API}/api/bookmarks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ questionId: question._id }),
+      });
+      const data = await readJsonSafe(res);
+      if (!res.ok) throw new Error(data.error || "Failed to bookmark");
+      setBookmarked(!!data.bookmarked);
+      setActionMsg(data.bookmarked ? "Bookmarked ✓" : "Bookmark removed");
+    } catch (e) {
+      setActionMsg(e.message);
+    }
+  };
+
+  const submitFeedback = async () => {
+    setActionMsg("");
+    try {
+      const res = await fetch(`${API}/api/feedback`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ questionId: question._id, rating: Number(rating), text: feedbackText }),
+      });
+      const data = await readJsonSafe(res);
+      if (!res.ok) throw new Error(data.error || "Failed to send feedback");
+      setShowFeedback(false);
+      setFeedbackText("");
+      setActionMsg("Feedback sent ✓");
+    } catch (e) {
+      setActionMsg(e.message);
+    }
+  };
+
+  const fetchSolution = async () => {
+    setActionMsg("");
+    try {
+      const res = await fetch(`${API}/api/explain/${question._id}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+      const data = await readJsonSafe(res);
+      if (!res.ok) throw new Error(data.error || "Failed to load solution");
+      setSolution(data.solution || data.prompt || "No solution yet.");
+    } catch (e) {
+      setActionMsg(e.message);
+    }
+  };
 
   const currentAttempt = (attempts || []).find(
     (q) => q.questionId._id === question._id
@@ -72,7 +165,7 @@ const Question = ({ question, attempts = [] }) => {
     };
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/attempt`, {
+      const response = await fetch(`${API}/api/attempt`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -81,11 +174,11 @@ const Question = ({ question, attempts = [] }) => {
         body: JSON.stringify(attemptData),
       });
 
-      const data = await response.json();
+      const data = await readJsonSafe(response);
       if (!response.ok) throw new Error(data.error || "Failed to attempt");
       console.log("Attempt recorded:", data);
     } catch (error) {
-      console.error("Error submitting attempt:", error);
+      setActionMsg(error.message);
     }
   };
 
@@ -99,14 +192,22 @@ const Question = ({ question, attempts = [] }) => {
           <span className="chip">{question.category}</span>
         </div>
         <div className="question-actions">
-          <button className="bookmark-btn">
-            <BiBookmarkPlus />
+          <button className="bookmark-btn" onClick={toggleBookmark} title={bookmarked ? "Remove bookmark" : "Bookmark"}>
+            {bookmarked ? <BiBookmark color="#1a73e8" /> : <BiBookmarkPlus />}
           </button>
-          <button className="feedback-btn">
+          <button className="feedback-btn" onClick={() => setShowFeedback((s) => !s)} title="Feedback">
             <MdOutlineFeedback />
+          </button>
+          <button className="feedback-btn" onClick={fetchSolution} title="Solution / Explain">
+            ?
           </button>
         </div>
       </div>
+      {actionMsg && (
+        <div className="attempt-summary">
+          <p>{actionMsg}</p>
+        </div>
+      )}
 
       {question.imageUrl && (
         <div className="question-image">
@@ -196,6 +297,33 @@ const Question = ({ question, attempts = [] }) => {
           <Timer isRunning={isAttempting} onStop={handleSubmit} />
         )}
       </div>
+      {showFeedback && (
+        <div className="attempt-summary">
+          <p><strong>Rate this question (1-5)</strong></p>
+          <input
+            type="number"
+            min="1"
+            max="5"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            className="numerical-input"
+          />
+          <input
+            type="text"
+            placeholder="Feedback (optional)"
+            value={feedbackText}
+            onChange={(e) => setFeedbackText(e.target.value)}
+            className="numerical-input"
+          />
+          <button className="attempt-btn" onClick={submitFeedback}>Send feedback</button>
+        </div>
+      )}
+      {solution && (
+        <div className="attempt-summary">
+          <p><strong>Solution / Explanation:</strong></p>
+          <p>{solution}</p>
+        </div>
+      )}
     </div>
   );
 };

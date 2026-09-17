@@ -10,8 +10,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ["11", "12", "Dropper"],
     required: true,
-  }
-//   isAdmin: { type: Boolean, required: true, default: false },
+  },
+  isAdmin: { type: Boolean, default: false },
+  createdAt: { type: Date, default: Date.now },
 });
 
 // static signup method

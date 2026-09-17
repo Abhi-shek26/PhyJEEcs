@@ -1,0 +1,17 @@
+.insights-container { max-width: 1200px; margin: 0 auto; padding: 1rem; text-align: left; }
+.insights-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+.kpi-card { background: #f5f7ff; border-radius: 12px; padding: 0.9rem; display: flex; flex-direction: column; gap: 0.25rem; }
+.kpi-card span { font-size: 0.8rem; color: #555; }
+.kpi-card strong { font-size: 1.4rem; }
+.funnel-strip { display: flex; flex-wrap: wrap; gap: 1rem; background: #eef6ee; padding: 0.75rem 1rem; border-radius: 10px; margin-bottom: 1rem; }
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.chart-card { border: 1px solid #eee; border-radius: 12px; padding: 1rem; background: #fff; margin-bottom: 1rem; }
+.insights-table { width: 100%; border-collapse: collapse; }
+.insights-table th, .insights-table td { border-bottom: 1px solid #eee; padding: 6px 8px; font-size: 0.9rem; }
+.plain-list { list-style: none; padding: 0; margin: 0; }
+.muted { color: #666; font-size: 0.85rem; }
+.rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.6rem; margin-top: 0.6rem; }
+.rec-card { border: 1px solid #e3e3e3; border-radius: 10px; padding: 0.6rem; display: flex; flex-direction: column; gap: 0.2rem; background: #fafbff; }
+.rec-card.review { background: #fff7ed; }
+.filter-button { background: #1a73e8; color: #fff; border: none; border-radius: 8px; padding: 0.5rem 1rem; cursor: pointer; }

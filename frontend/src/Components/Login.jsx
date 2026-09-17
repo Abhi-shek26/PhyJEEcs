@@ -21,7 +21,7 @@ const Login = () => {
     }
 
     console.log("Login successful:", data);
-    navigate("/home");
+    navigate("/dashboard");
   };
 
   return (

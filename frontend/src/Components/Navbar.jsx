@@ -40,6 +40,7 @@ const Navbar = () => {
           <>
             <NavLink to="/practice">Practice</NavLink>
             <NavLink to="/history">History</NavLink>
+            <NavLink to="/insights">Insights</NavLink>
 
             <div
               className="profile-container"

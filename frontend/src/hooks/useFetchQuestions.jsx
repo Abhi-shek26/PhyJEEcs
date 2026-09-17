@@ -40,8 +40,8 @@ export const useFetchQuestions = () => {
       }
 
       const data = await response.json();
-      console.log("📌 Questions fetched:", data); 
-      dispatch({ type: "SET_QUESTIONS", payload: data });
+      const list = Array.isArray(data) ? data : data.data || [];
+      dispatch({ type: "SET_QUESTIONS", payload: list });
     } catch (error) {
       console.error("Error fetching questions:", error);
     }
